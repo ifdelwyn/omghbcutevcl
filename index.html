@@ -1,0 +1,5220 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EcoShop – Organic & Eco-Friendly Store</title>
+    <meta
+      name="description"
+      content="EcoShop – Premium organic and eco-friendly products. Certified, sustainable, delivered fresh."
+    />
+
+    <!-- CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <style>
+      /* =========================================================
+   DESIGN TOKENS
+   ========================================================= */
+      :root {
+        --primary: #16a34a;
+        --secondary: #15803d;
+        --accent: #22c55e;
+        --bg: #f0fdf4;
+        --soft: #dcfce7;
+        --glow: #bbf7d0;
+        --dark: #14532d;
+        --text: #0f2417;
+        --muted: #5b6b62;
+        --card: #ffffff;
+        --border: rgba(20, 83, 45, 0.1);
+        --shadow: 0 10px 30px -10px rgba(20, 83, 45, 0.18);
+        --shadow-lg: 0 30px 60px -20px rgba(20, 83, 45, 0.25);
+        --radius: 18px;
+        --radius-sm: 12px;
+        --glass: rgba(255, 255, 255, 0.65);
+        --glass-strong: rgba(255, 255, 255, 0.85);
+        --grad: linear-gradient(135deg, #16a34a 0%, #22c55e 60%, #bbf7d0 100%);
+        --grad-dark: linear-gradient(135deg, #14532d 0%, #15803d 100%);
+      }
+      [data-theme="dark"] {
+        --bg: #06140d;
+        --soft: #0e2418;
+        --glow: #163826;
+        --text: #e8fbef;
+        --muted: #9ab5a4;
+        --card: #0d2117;
+        --border: rgba(187, 247, 208, 0.1);
+        --glass: rgba(13, 33, 23, 0.7);
+        --glass-strong: rgba(13, 33, 23, 0.9);
+        --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.55);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        padding: 0;
+        margin: 0;
+      }
+      body {
+        font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        transition:
+          background 0.4s ease,
+          color 0.4s ease;
+      }
+      html[dir="rtl"] body {
+        font-family: "Cairo", "Plus Jakarta Sans", sans-serif;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+      button {
+        font-family: inherit;
+      }
+      ::selection {
+        background: var(--accent);
+        color: #fff;
+      }
+
+      /* scrollbar */
+      ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: linear-gradient(var(--primary), var(--secondary));
+        border-radius: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      /* =========================================================
+   LOADING SCREEN
+   ========================================================= */
+      #loader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: var(--bg);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition:
+          opacity 0.6s ease,
+          visibility 0.6s ease;
+      }
+      #loader.hide {
+        opacity: 0;
+        visibility: hidden;
+      }
+      .loader-leaf {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: var(--grad);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 2rem;
+        animation: pulse 1.6s ease-in-out infinite;
+        box-shadow: 0 0 60px rgba(34, 197, 94, 0.5);
+      }
+      .loader-text {
+        margin-top: 18px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: var(--secondary);
+      }
+      .loader-bar {
+        margin-top: 14px;
+        width: 200px;
+        height: 4px;
+        background: var(--soft);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .loader-bar span {
+        display: block;
+        height: 100%;
+        width: 30%;
+        background: var(--grad);
+        border-radius: 8px;
+        animation: slide 1.2s ease-in-out infinite;
+      }
+      @keyframes slide {
+        0% {
+          margin-left: -30%;
+        }
+        100% {
+          margin-left: 100%;
+        }
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.08);
+        }
+      }
+
+      /* =========================================================
+   PARTICLES BG
+   ========================================================= */
+      #particles {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      .particle {
+        position: absolute;
+        border-radius: 50%;
+        background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+        opacity: 0.4;
+        animation: float linear infinite;
+      }
+      @keyframes float {
+        0% {
+          transform: translateY(0) translateX(0);
+        }
+        50% {
+          transform: translateY(-40px) translateX(20px);
+        }
+        100% {
+          transform: translateY(0) translateX(0);
+        }
+      }
+
+      /* =========================================================
+   NAVBAR (floating glass)
+   ========================================================= */
+      .navbar-eco {
+        position: fixed;
+        top: 18px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 40px);
+        max-width: 1320px;
+        z-index: 1040;
+        background: var(--glass);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+        padding: 10px 22px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        transition: all 0.35s ease;
+      }
+      .navbar-eco.scrolled {
+        top: 8px;
+        box-shadow: var(--shadow-lg);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 800;
+        font-size: 1.25rem;
+        color: var(--secondary);
+      }
+      .brand-logo {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: var(--grad);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 1.1rem;
+        box-shadow: 0 8px 20px -6px rgba(22, 163, 74, 0.5);
+      }
+      .nav-links {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+      .nav-links a {
+        padding: 9px 16px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.93rem;
+        color: var(--text);
+        transition: all 0.25s;
+      }
+      .nav-links a:hover,
+      .nav-links a.active {
+        background: var(--soft);
+        color: var(--secondary);
+      }
+      .nav-actions {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .icon-btn {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: var(--card);
+        color: var(--text);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.25s;
+      }
+      .icon-btn:hover {
+        background: var(--soft);
+        color: var(--secondary);
+        transform: translateY(-2px);
+      }
+      .icon-btn .badge-c {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        background: var(--primary);
+        color: #fff;
+        font-size: 0.65rem;
+        font-weight: 700;
+        border-radius: 10px;
+        min-width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 5px;
+      }
+      .mobile-toggle {
+        display: none;
+      }
+      @media (max-width: 992px) {
+        .nav-links {
+          display: none;
+          position: absolute;
+          top: 70px;
+          left: 0;
+          right: 0;
+          background: var(--glass-strong);
+          backdrop-filter: blur(20px);
+          border-radius: 18px;
+          padding: 14px;
+          flex-direction: column;
+          align-items: stretch;
+          border: 1px solid var(--border);
+          box-shadow: var(--shadow-lg);
+        }
+        .nav-links.show {
+          display: flex;
+        }
+        .mobile-toggle {
+          display: inline-flex;
+        }
+      }
+
+      /* =========================================================
+   BUTTONS
+   ========================================================= */
+      .btn-eco {
+        background: var(--grad);
+        color: #fff;
+        border: none;
+        padding: 12px 22px;
+        border-radius: 14px;
+        font-weight: 700;
+        box-shadow: 0 10px 24px -8px rgba(22, 163, 74, 0.55);
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+      .btn-eco::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          120deg,
+          transparent,
+          rgba(255, 255, 255, 0.35),
+          transparent
+        );
+        transform: translateX(-100%);
+        transition: transform 0.6s;
+      }
+      .btn-eco:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 32px -8px rgba(22, 163, 74, 0.7);
+        color: #fff;
+      }
+      .btn-eco:hover::before {
+        transform: translateX(100%);
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--secondary);
+        border: 1.5px solid var(--primary);
+        padding: 11px 20px;
+        border-radius: 14px;
+        font-weight: 700;
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+      .btn-ghost:hover {
+        background: var(--primary);
+        color: #fff;
+      }
+
+      /* =========================================================
+   HERO
+   ========================================================= */
+      .hero {
+        position: relative;
+        padding: 160px 0 80px;
+        overflow: hidden;
+      }
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 60px;
+        align-items: center;
+      }
+      @media (max-width: 992px) {
+        .hero-grid {
+          grid-template-columns: 1fr;
+          text-align: center;
+        }
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--soft);
+        color: var(--secondary);
+        padding: 8px 16px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        border: 1px solid var(--glow);
+      }
+      .hero h1 {
+        font-size: clamp(2.2rem, 5vw, 4rem);
+        font-weight: 800;
+        line-height: 1.05;
+        margin: 18px 0 18px;
+        letter-spacing: -1.5px;
+      }
+      .hero h1 .gradient-text {
+        background: var(--grad);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+      }
+      .hero p.lead {
+        font-size: 1.1rem;
+        color: var(--muted);
+        max-width: 540px;
+        margin: 0 0 28px;
+      }
+      @media (max-width: 992px) {
+        .hero p.lead {
+          margin: 0 auto 28px;
+        }
+      }
+      .hero-stats {
+        display: flex;
+        gap: 30px;
+        margin-top: 38px;
+        flex-wrap: wrap;
+      }
+      .hero-stats .stat strong {
+        display: block;
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--secondary);
+      }
+      .hero-stats .stat span {
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .hero-visual {
+        position: relative;
+        height: 520px;
+      }
+      .hero-card {
+        position: absolute;
+        background: var(--card);
+        border-radius: 24px;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border);
+        padding: 18px;
+        animation: floaty 6s ease-in-out infinite;
+      }
+      .hero-card.main {
+        inset: 0;
+        background: var(--grad);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 30px;
+        border: none;
+        overflow: hidden;
+      }
+      .hero-card.main::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: url("https://images.unsplash.com/photo-1542838132-92c53300491e?w=900&q=80")
+          center/cover;
+        opacity: 0.35;
+        mix-blend-mode: overlay;
+      }
+      .hero-card.main h3 {
+        font-size: 1.6rem;
+        font-weight: 800;
+        margin: 0;
+        position: relative;
+      }
+      .hero-card.main p {
+        margin: 6px 0 0;
+        opacity: 0.95;
+        position: relative;
+      }
+      .hero-card.float1 {
+        top: 30px;
+        right: -30px;
+        width: 200px;
+        animation-delay: -2s;
+      }
+      .hero-card.float2 {
+        bottom: 30px;
+        left: -30px;
+        width: 230px;
+        animation-delay: -4s;
+      }
+      .mini-prod {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .mini-prod img {
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        object-fit: cover;
+      }
+      .mini-prod small {
+        color: var(--muted);
+      }
+      @keyframes floaty {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-14px);
+        }
+      }
+      @media (max-width: 992px) {
+        .hero-visual {
+          height: 360px;
+          max-width: 480px;
+          margin: 0 auto;
+        }
+      }
+
+      /* =========================================================
+   SECTION GENERIC
+   ========================================================= */
+      section {
+        position: relative;
+        z-index: 1;
+      }
+      .section {
+        padding: 70px 0;
+      }
+      .section-head {
+        text-align: center;
+        max-width: 680px;
+        margin: 0 auto 44px;
+      }
+      .section-head .eyebrow {
+        color: var(--primary);
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-size: 0.78rem;
+      }
+      .section-head h2 {
+        font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+        font-weight: 800;
+        margin: 10px 0;
+        letter-spacing: -0.5px;
+      }
+      .section-head p {
+        color: var(--muted);
+      }
+
+      /* Category chips */
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 32px;
+      }
+      .chip {
+        padding: 9px 18px;
+        border-radius: 30px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.25s;
+        color: var(--text);
+      }
+      .chip:hover {
+        border-color: var(--primary);
+        color: var(--secondary);
+      }
+      .chip.active {
+        background: var(--grad);
+        color: #fff;
+        border-color: transparent;
+        box-shadow: 0 8px 18px -6px rgba(22, 163, 74, 0.5);
+      }
+
+      /* Search + filters */
+      .toolbar {
+        display: grid;
+        grid-template-columns: 1fr auto auto auto;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      @media (max-width: 768px) {
+        .toolbar {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      .search-wrap {
+        position: relative;
+      }
+      .search-wrap input {
+        width: 100%;
+        padding: 14px 18px 14px 46px;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: var(--card);
+        color: var(--text);
+        font-size: 0.95rem;
+        outline: none;
+        transition: all 0.25s;
+      }
+      .search-wrap input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px var(--soft);
+      }
+      .search-wrap i {
+        position: absolute;
+        top: 50%;
+        left: 16px;
+        transform: translateY(-50%);
+        color: var(--muted);
+      }
+      .form-select-eco {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 12px 14px;
+        color: var(--text);
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        outline: none;
+      }
+      .form-select-eco:focus {
+        border-color: var(--primary);
+      }
+
+      /* =========================================================
+   PRODUCT CARDS
+   ========================================================= */
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 22px;
+      }
+      .product-card {
+        background: var(--card);
+        border-radius: var(--radius);
+        overflow: hidden;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      .product-card.in {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .product-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--glow);
+      }
+      .pc-img {
+        position: relative;
+        aspect-ratio: 1/1;
+        overflow: hidden;
+        background: var(--soft);
+      }
+      .pc-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+      }
+      .product-card:hover .pc-img img {
+        transform: scale(1.08);
+      }
+      .pc-badges {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        z-index: 2;
+      }
+      .pc-badge {
+        background: var(--card);
+        color: var(--secondary);
+        padding: 5px 10px;
+        border-radius: 8px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        box-shadow: var(--shadow);
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .pc-badge.org {
+        background: var(--grad);
+        color: #fff;
+      }
+      .pc-menu {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: var(--glass-strong);
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border: 1px solid var(--border);
+        z-index: 3;
+        color: var(--text);
+        transition: all 0.25s;
+      }
+      .pc-menu:hover {
+        background: var(--primary);
+        color: #fff;
+      }
+      .pc-fav {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: var(--glass-strong);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: var(--muted);
+        transition: all 0.25s;
+        z-index: 2;
+      }
+      .pc-fav.active,
+      .pc-fav:hover {
+        color: #e11d48;
+        background: #fff1f2;
+      }
+      .pc-body {
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+      }
+      .pc-cat {
+        font-size: 0.72rem;
+        color: var(--primary);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .pc-name {
+        font-weight: 700;
+        font-size: 1.02rem;
+        margin: 6px 0 6px;
+        line-height: 1.3;
+      }
+      .pc-rating {
+        color: #f59e0b;
+        font-size: 0.8rem;
+        margin-bottom: 8px;
+      }
+      .pc-rating span {
+        color: var(--muted);
+        margin-left: 6px;
+      }
+      .pc-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: auto;
+        gap: 8px;
+      }
+      .pc-price {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: var(--secondary);
+      }
+      .pc-price small {
+        font-size: 0.75rem;
+        color: var(--muted);
+        text-decoration: line-through;
+        font-weight: 600;
+        margin-left: 6px;
+      }
+      .pc-add {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: var(--grad);
+        color: #fff;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 8px 18px -6px rgba(22, 163, 74, 0.5);
+        transition: all 0.3s;
+      }
+      .pc-add:hover {
+        transform: scale(1.1) rotate(5deg);
+      }
+
+      /* =========================================================
+   FEATURES BAR
+   ========================================================= */
+      .features-bar {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 18px;
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 22px;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+      }
+      .feat {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+      }
+      .feat-ico {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: var(--soft);
+        color: var(--secondary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+      }
+      .feat strong {
+        display: block;
+        font-size: 0.95rem;
+      }
+      .feat span {
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+
+      /* =========================================================
+   CART DRAWER
+   ========================================================= */
+      .drawer {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100vh;
+        width: 420px;
+        max-width: 100%;
+        background: var(--card);
+        box-shadow: -20px 0 50px -10px rgba(0, 0, 0, 0.2);
+        z-index: 1060;
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        display: flex;
+        flex-direction: column;
+      }
+      html[dir="rtl"] .drawer {
+        right: auto;
+        left: 0;
+        transform: translateX(-100%);
+        box-shadow: 20px 0 50px -10px rgba(0, 0, 0, 0.2);
+      }
+      .drawer.open {
+        transform: translateX(0);
+      }
+      .drawer-head {
+        padding: 20px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .drawer-head h3 {
+        margin: 0;
+        font-weight: 800;
+      }
+      .drawer-body {
+        flex: 1;
+        overflow: auto;
+        padding: 18px;
+      }
+      .drawer-foot {
+        padding: 20px;
+        border-top: 1px solid var(--border);
+        background: var(--soft);
+      }
+      .cart-item {
+        display: flex;
+        gap: 12px;
+        padding: 12px;
+        border-radius: 14px;
+        background: var(--bg);
+        margin-bottom: 10px;
+        align-items: center;
+      }
+      .cart-item img {
+        width: 64px;
+        height: 64px;
+        border-radius: 12px;
+        object-fit: cover;
+        flex-shrink: 0;
+      }
+      .cart-item .ci-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .cart-item .ci-info strong {
+        font-size: 0.92rem;
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .cart-item .ci-info small {
+        color: var(--muted);
+        font-size: 0.78rem;
+      }
+      .qty {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--card);
+        border-radius: 10px;
+        padding: 3px;
+        border: 1px solid var(--border);
+      }
+      .qty button {
+        width: 26px;
+        height: 26px;
+        border: none;
+        background: transparent;
+        color: var(--text);
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 700;
+      }
+      .qty button:hover {
+        background: var(--soft);
+      }
+      .qty span {
+        min-width: 22px;
+        text-align: center;
+        font-weight: 700;
+        font-size: 0.88rem;
+      }
+      .ci-remove {
+        background: none;
+        border: none;
+        color: #e11d48;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+      .cart-empty {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--muted);
+      }
+      .cart-empty i {
+        font-size: 3rem;
+        color: var(--glow);
+        margin-bottom: 14px;
+      }
+
+      .totals-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+      .totals-row.big {
+        font-weight: 800;
+        color: var(--text);
+        font-size: 1.05rem;
+        border-top: 1px dashed var(--border);
+        padding-top: 10px;
+        margin-top: 6px;
+      }
+      .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(10, 30, 18, 0.45);
+        backdrop-filter: blur(4px);
+        z-index: 1055;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.35s;
+      }
+      .overlay.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      /* =========================================================
+   MODALS (custom)
+   ========================================================= */
+      .eco-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 1070;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+      .eco-modal.show {
+        display: flex;
+        animation: fadeIn 0.3s ease;
+      }
+      .eco-modal-bg {
+        position: absolute;
+        inset: 0;
+        background: rgba(10, 30, 18, 0.55);
+        backdrop-filter: blur(6px);
+      }
+      .eco-modal-content {
+        position: relative;
+        background: var(--card);
+        border-radius: 22px;
+        max-width: 920px;
+        width: 100%;
+        max-height: 90vh;
+        overflow: auto;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border);
+        animation: popIn 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .eco-modal-content.sm {
+        max-width: 480px;
+      }
+      .eco-modal-content.md {
+        max-width: 640px;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes popIn {
+        from {
+          transform: scale(0.9) translateY(20px);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1) translateY(0);
+          opacity: 1;
+        }
+      }
+      .modal-close {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: var(--soft);
+        color: var(--secondary);
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 5;
+      }
+      html[dir="rtl"] .modal-close {
+        right: auto;
+        left: 14px;
+      }
+
+      /* product modal */
+      .pm-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+      }
+      @media (max-width: 768px) {
+        .pm-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .pm-img {
+        aspect-ratio: 1/1;
+        background: var(--soft);
+        overflow: hidden;
+      }
+      .pm-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .pm-body {
+        padding: 30px;
+      }
+      .pm-body h2 {
+        font-weight: 800;
+        letter-spacing: -0.5px;
+      }
+      .pm-meta {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin: 16px 0;
+      }
+      .pm-meta div {
+        background: var(--soft);
+        padding: 10px 12px;
+        border-radius: 12px;
+        font-size: 0.85rem;
+      }
+      .pm-meta div strong {
+        display: block;
+        font-size: 0.72rem;
+        color: var(--muted);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 4px;
+      }
+
+      /* quick info popup */
+      .quick-popup {
+        position: absolute;
+        background: var(--card);
+        border-radius: 14px;
+        padding: 14px;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border);
+        width: 260px;
+        z-index: 50;
+        font-size: 0.85rem;
+        animation: popIn 0.25s ease;
+      }
+      .quick-popup .qp-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 0;
+        border-bottom: 1px dashed var(--border);
+      }
+      .quick-popup .qp-row:last-child {
+        border: none;
+      }
+      .quick-popup .qp-row span {
+        color: var(--muted);
+      }
+      .quick-popup .qp-row strong {
+        font-weight: 700;
+      }
+
+      /* =========================================================
+   AUTH
+   ========================================================= */
+      .auth-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 560px;
+      }
+      @media (max-width: 768px) {
+        .auth-grid {
+          grid-template-columns: 1fr;
+        }
+        .auth-side {
+          display: none;
+        }
+      }
+      .auth-side {
+        background: var(--grad);
+        color: #fff;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        overflow: hidden;
+      }
+      .auth-side::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: url("https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80")
+          center/cover;
+        opacity: 0.25;
+        mix-blend-mode: overlay;
+      }
+      .auth-side h2 {
+        font-weight: 800;
+        font-size: 2rem;
+        position: relative;
+      }
+      .auth-side p {
+        position: relative;
+        opacity: 0.95;
+      }
+      .auth-side ul {
+        list-style: none;
+        padding: 0;
+        margin: 30px 0;
+        position: relative;
+      }
+      .auth-side ul li {
+        padding: 8px 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .auth-form-wrap {
+        padding: 40px;
+        overflow: auto;
+      }
+      .auth-form-wrap h3 {
+        font-weight: 800;
+        margin-bottom: 6px;
+      }
+      .auth-form-wrap .small-muted {
+        color: var(--muted);
+        margin-bottom: 24px;
+      }
+      .input-eco {
+        position: relative;
+        margin-bottom: 14px;
+      }
+      .input-eco label {
+        position: absolute;
+        top: 14px;
+        left: 16px;
+        color: var(--muted);
+        font-size: 0.88rem;
+        pointer-events: none;
+        transition: all 0.2s;
+        background: transparent;
+        padding: 0 4px;
+      }
+      html[dir="rtl"] .input-eco label {
+        left: auto;
+        right: 16px;
+      }
+      .input-eco input {
+        width: 100%;
+        padding: 18px 16px 8px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: var(--card);
+        color: var(--text);
+        outline: none;
+        font-size: 0.95rem;
+        transition: all 0.25s;
+      }
+      .input-eco input:focus,
+      .input-eco input:not(:placeholder-shown) {
+        border-color: var(--primary);
+      }
+      .input-eco input:focus + label,
+      .input-eco input:not(:placeholder-shown) + label {
+        top: 4px;
+        font-size: 0.7rem;
+        color: var(--primary);
+        font-weight: 700;
+      }
+      .input-eco .toggle-pw {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        color: var(--muted);
+        cursor: pointer;
+        background: none;
+        border: none;
+      }
+      html[dir="rtl"] .input-eco .toggle-pw {
+        right: auto;
+        left: 14px;
+      }
+      .field-error {
+        color: #dc2626;
+        font-size: 0.78rem;
+        margin-top: 4px;
+        padding-left: 6px;
+      }
+      .pw-meter {
+        height: 5px;
+        border-radius: 8px;
+        background: var(--soft);
+        overflow: hidden;
+        margin: 6px 4px 0;
+      }
+      .pw-meter span {
+        display: block;
+        height: 100%;
+        width: 0;
+        background: #dc2626;
+        transition: all 0.3s;
+      }
+      .auth-switch {
+        text-align: center;
+        color: var(--muted);
+        margin-top: 16px;
+        font-size: 0.9rem;
+      }
+      .auth-switch a {
+        color: var(--primary);
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      /* =========================================================
+   FOOTER
+   ========================================================= */
+      footer {
+        background: var(--grad-dark);
+        color: #d4f4df;
+        margin-top: 80px;
+        padding: 70px 0 24px;
+        position: relative;
+        overflow: hidden;
+      }
+      footer::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          circle at 20% 20%,
+          rgba(34, 197, 94, 0.25),
+          transparent 50%
+        );
+      }
+      .f-grid {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr 1fr 1.4fr;
+        gap: 40px;
+        position: relative;
+      }
+      @media (max-width: 768px) {
+        .f-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (max-width: 480px) {
+        .f-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .f-col h5 {
+        color: #fff;
+        font-weight: 800;
+        margin-bottom: 18px;
+        font-size: 1rem;
+      }
+      .f-col a,
+      .f-col p {
+        color: #bbe5c8;
+        font-size: 0.9rem;
+        display: block;
+        margin-bottom: 8px;
+        transition: all 0.2s;
+      }
+      .f-col a:hover {
+        color: #fff;
+        transform: translateX(4px);
+      }
+      html[dir="rtl"] .f-col a:hover {
+        transform: translateX(-4px);
+      }
+      .f-newsletter input {
+        width: 100%;
+        padding: 13px 16px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+        outline: none;
+      }
+      .f-newsletter input::placeholder {
+        color: #a0c9ae;
+      }
+      .f-newsletter button {
+        margin-top: 10px;
+        width: 100%;
+      }
+      .f-social {
+        display: flex;
+        gap: 10px;
+        margin-top: 14px;
+      }
+      .f-social a {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        margin: 0;
+      }
+      .f-social a:hover {
+        background: var(--accent);
+        transform: translateY(-3px);
+      }
+      .f-bot {
+        margin-top: 50px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        text-align: center;
+        color: #a0c9ae;
+        font-size: 0.85rem;
+        position: relative;
+      }
+
+      /* =========================================================
+   TOASTS
+   ========================================================= */
+      #toasts {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      html[dir="rtl"] #toasts {
+        right: auto;
+        left: 20px;
+      }
+      .toast-eco {
+        background: var(--card);
+        border-left: 4px solid var(--primary);
+        border-radius: 12px;
+        padding: 14px 18px;
+        box-shadow: var(--shadow-lg);
+        min-width: 280px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 600;
+        color: var(--text);
+        animation: slideInR 0.35s ease;
+      }
+      .toast-eco.success {
+        border-color: var(--primary);
+      }
+      .toast-eco.error {
+        border-color: #dc2626;
+      }
+      .toast-eco.warn {
+        border-color: #f59e0b;
+      }
+      .toast-eco.info {
+        border-color: #2563eb;
+      }
+      .toast-eco i {
+        font-size: 1.2rem;
+        color: var(--primary);
+      }
+      .toast-eco.error i {
+        color: #dc2626;
+      }
+      .toast-eco.warn i {
+        color: #f59e0b;
+      }
+      .toast-eco.info i {
+        color: #2563eb;
+      }
+      @keyframes slideInR {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      /* =========================================================
+   PAYMENT
+   ========================================================= */
+      .pay-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+      .pay-tab {
+        flex: 1;
+        min-width: 120px;
+        padding: 14px;
+        border-radius: 14px;
+        border: 2px solid var(--border);
+        background: var(--card);
+        cursor: pointer;
+        font-weight: 700;
+        text-align: center;
+        transition: all 0.25s;
+        color: var(--text);
+      }
+      .pay-tab i {
+        display: block;
+        font-size: 1.5rem;
+        margin-bottom: 6px;
+        color: var(--secondary);
+      }
+      .pay-tab.active {
+        border-color: var(--primary);
+        background: var(--soft);
+        color: var(--secondary);
+      }
+      .qr-box {
+        text-align: center;
+        padding: 24px;
+        background: var(--soft);
+        border-radius: 18px;
+      }
+      .qr-box #qrcode {
+        display: inline-block;
+        background: #fff;
+        padding: 14px;
+        border-radius: 14px;
+        margin-bottom: 14px;
+      }
+      .qr-timer {
+        display: inline-block;
+        background: var(--card);
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 800;
+        color: var(--primary);
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+      }
+      .qr-timer.expired {
+        color: #dc2626;
+      }
+      .wallet-row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        background: var(--card);
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        font-family: monospace;
+        font-size: 0.85rem;
+        word-break: break-all;
+        margin: 10px 0;
+      }
+      .wallet-row button {
+        margin-left: auto;
+        background: var(--soft);
+        border: none;
+        color: var(--secondary);
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 0.8rem;
+        flex-shrink: 0;
+      }
+
+      /* =========================================================
+   PROFILE / TRACKING
+   ========================================================= */
+      .profile-grid {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 24px;
+      }
+      @media (max-width: 768px) {
+        .profile-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .profile-side {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 24px;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        height: fit-content;
+      }
+      .avatar-big {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        background: var(--grad);
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: #fff;
+        font-weight: 800;
+        overflow: hidden;
+      }
+      .avatar-big img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .profile-tabs {
+        list-style: none;
+        padding: 0;
+        margin: 20px 0 0;
+      }
+      .profile-tabs li {
+        padding: 12px 14px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text);
+        transition: all 0.2s;
+      }
+      .profile-tabs li:hover {
+        background: var(--soft);
+        color: var(--secondary);
+      }
+      .profile-tabs li.active {
+        background: var(--grad);
+        color: #fff;
+      }
+      .profile-main {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 24px;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+      }
+
+      .avatar-picker {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 8px;
+        margin: 14px 0;
+      }
+      @media (max-width: 480px) {
+        .avatar-picker {
+          grid-template-columns: repeat(5, 1fr);
+        }
+      }
+      .avatar-picker .ap {
+        aspect-ratio: 1/1;
+        border-radius: 50%;
+        background: var(--grad);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: 700;
+        cursor: pointer;
+        border: 3px solid transparent;
+        transition: all 0.2s;
+        font-size: 1.2rem;
+      }
+      .avatar-picker .ap:hover {
+        transform: scale(1.1);
+      }
+      .avatar-picker .ap.sel {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px var(--soft);
+      }
+
+      /* tracking timeline */
+      .tl {
+        position: relative;
+        padding-left: 34px;
+        margin: 18px 0;
+      }
+      html[dir="rtl"] .tl {
+        padding-left: 0;
+        padding-right: 34px;
+      }
+      .tl::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 14px;
+        width: 2px;
+        background: var(--border);
+      }
+      html[dir="rtl"] .tl::before {
+        left: auto;
+        right: 14px;
+      }
+      .tl-step {
+        position: relative;
+        padding: 10px 0 20px;
+      }
+      .tl-step::before {
+        content: "";
+        position: absolute;
+        left: -26px;
+        top: 14px;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--border);
+        border: 3px solid var(--card);
+      }
+      html[dir="rtl"] .tl-step::before {
+        left: auto;
+        right: -26px;
+      }
+      .tl-step.done::before {
+        background: var(--primary);
+      }
+      .tl-step.current::before {
+        background: var(--accent);
+        box-shadow: 0 0 0 4px var(--glow);
+        animation: pulse 1.6s infinite;
+      }
+      .tl-step strong {
+        display: block;
+        font-weight: 700;
+      }
+      .tl-step small {
+        color: var(--muted);
+      }
+
+      /* map */
+      .tracking-map {
+        position: relative;
+        height: 220px;
+        border-radius: 18px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #cdeed8, #a8e6c1);
+        border: 1px solid var(--border);
+        margin-top: 18px;
+      }
+      .tm-road {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 8px;
+        background: repeating-linear-gradient(
+          90deg,
+          #15803d 0 14px,
+          transparent 14px 28px
+        );
+        transform: translateY(-50%);
+      }
+      .tm-from,
+      .tm-to {
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background: #fff;
+        padding: 6px 12px;
+        border-radius: 30px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--secondary);
+        box-shadow: var(--shadow);
+      }
+      .tm-from {
+        left: 8%;
+      }
+      .tm-to {
+        left: 92%;
+      }
+      .tm-truck {
+        position: absolute;
+        top: 50%;
+        left: 8%;
+        transform: translate(-50%, -50%);
+        font-size: 1.8rem;
+        animation: driveTruck 8s linear infinite;
+        color: var(--secondary);
+      }
+      @keyframes driveTruck {
+        0% {
+          left: 8%;
+        }
+        100% {
+          left: 92%;
+        }
+      }
+
+      /* =========================================================
+   ADMIN
+   ========================================================= */
+      .admin-shell {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        min-height: 100vh;
+        background: var(--bg);
+      }
+      @media (max-width: 768px) {
+        .admin-shell {
+          grid-template-columns: 1fr;
+        }
+        .admin-side {
+          position: fixed;
+          z-index: 1080;
+          height: 100vh;
+          transform: translateX(-100%);
+          transition: transform 0.3s;
+        }
+        .admin-side.open {
+          transform: translateX(0);
+        }
+      }
+      .admin-side {
+        background: var(--grad-dark);
+        color: #d4f4df;
+        padding: 24px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .admin-side .logo-a {
+        color: #fff;
+        font-weight: 800;
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+        padding: 0 8px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .admin-nav {
+        padding: 10px 14px;
+        border-radius: 12px;
+        color: #bbe5c8;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.2s;
+        font-size: 0.92rem;
+      }
+      .admin-nav:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+      }
+      .admin-nav.active {
+        background: var(--accent);
+        color: #fff;
+      }
+      .admin-main {
+        padding: 24px;
+        overflow: auto;
+      }
+      .admin-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .admin-top h2 {
+        font-weight: 800;
+        margin: 0;
+      }
+      .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+      .kpi {
+        background: var(--card);
+        padding: 18px;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+      }
+      .kpi small {
+        color: var(--muted);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.72rem;
+      }
+      .kpi strong {
+        display: block;
+        font-size: 1.6rem;
+        font-weight: 800;
+        margin: 6px 0;
+        color: var(--secondary);
+      }
+      .kpi span {
+        color: var(--primary);
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+      .panel {
+        background: var(--card);
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        padding: 20px;
+        box-shadow: var(--shadow);
+        margin-bottom: 18px;
+      }
+      .table-eco {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .table-eco th,
+      .table-eco td {
+        text-align: left;
+        padding: 12px 10px;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.9rem;
+      }
+      html[dir="rtl"] .table-eco th,
+      html[dir="rtl"] .table-eco td {
+        text-align: right;
+      }
+      .table-eco th {
+        font-weight: 700;
+        color: var(--muted);
+        text-transform: uppercase;
+        font-size: 0.72rem;
+        letter-spacing: 1px;
+      }
+      .tag {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 8px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        background: var(--soft);
+        color: var(--secondary);
+      }
+      .tag.warn {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .tag.err {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .tag.info {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+      .row-actions button {
+        background: none;
+        border: none;
+        color: var(--muted);
+        cursor: pointer;
+        padding: 6px;
+        border-radius: 6px;
+      }
+      .row-actions button:hover {
+        background: var(--soft);
+        color: var(--secondary);
+      }
+      .pagination-eco {
+        display: flex;
+        gap: 6px;
+        justify-content: center;
+        margin-top: 16px;
+      }
+      .pagination-eco button {
+        min-width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--card);
+        color: var(--text);
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .pagination-eco button.active {
+        background: var(--grad);
+        color: #fff;
+        border-color: transparent;
+      }
+
+      /* =========================================================
+   PAGE SECTIONS / VIEWS
+   ========================================================= */
+      .view {
+        display: none;
+      }
+      .view.active {
+        display: block;
+        animation: fadeUp 0.5s ease;
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* RTL adjustments */
+      html[dir="rtl"] .navbar-eco {
+        direction: rtl;
+      }
+      html[dir="rtl"] .text-start {
+        text-align: right !important;
+      }
+
+      /* utility */
+      .container-eco {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 22px;
+        position: relative;
+        z-index: 2;
+      }
+      .text-grad {
+        background: var(--grad);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+      }
+
+      /* skeleton */
+      .skeleton {
+        background: linear-gradient(
+          90deg,
+          var(--soft) 0%,
+          var(--glow) 50%,
+          var(--soft) 100%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.4s linear infinite;
+        border-radius: 12px;
+      }
+      @keyframes shimmer {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
+      }
+
+      /* checkout */
+      .co-grid {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 24px;
+      }
+      @media (max-width: 992px) {
+        .co-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .co-step {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+      .co-step .n {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--soft);
+        color: var(--secondary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 0.85rem;
+      }
+      .co-step.active .n {
+        background: var(--grad);
+        color: #fff;
+      }
+      .summary-card {
+        background: var(--card);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        padding: 20px;
+        box-shadow: var(--shadow);
+        position: sticky;
+        top: 100px;
+      }
+
+      /* category tile */
+      .cat-tile {
+        background: var(--card);
+        border-radius: 18px;
+        padding: 24px;
+        text-align: center;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .cat-tile:hover {
+        transform: translateY(-6px);
+        background: var(--soft);
+        border-color: var(--glow);
+      }
+      .cat-tile i {
+        font-size: 2.4rem;
+        color: var(--primary);
+        margin-bottom: 10px;
+      }
+      .cat-tile strong {
+        display: block;
+        font-weight: 700;
+      }
+      .cat-tile small {
+        color: var(--muted);
+      }
+
+      /* magnetic */
+      .magnetic {
+        display: inline-block;
+        transition: transform 0.15s ease;
+      }
+
+      /* hide scrollbar in modals on mobile */
+      .eco-modal-content::-webkit-scrollbar {
+        width: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ===== LOADING SCREEN ===== -->
+    <div id="loader">
+      <div class="loader-leaf"><i class="fa-solid fa-leaf"></i></div>
+      <div class="loader-text">ECOSHOP</div>
+      <div class="loader-bar"><span></span></div>
+    </div>
+
+    <!-- ===== PARTICLES ===== -->
+    <div id="particles"></div>
+
+    <!-- ===== TOASTS ===== -->
+    <div id="toasts"></div>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar-eco" id="navbar">
+      <a href="#" class="brand" data-view="home">
+        <div class="brand-logo"><i class="fa-solid fa-leaf"></i></div>
+        <span>EcoShop</span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="#" class="active" data-view="home" data-i18n="nav.home"
+          >Home</a
+        >
+        <a href="#" data-view="shop" data-i18n="nav.shop">Shop</a>
+        <a href="#" data-view="categories" data-i18n="nav.categories"
+          >Categories</a
+        >
+        <a href="#" data-view="tracking" data-i18n="nav.tracking">Tracking</a>
+        <a href="#" data-view="about" data-i18n="nav.about">About</a>
+      </div>
+      <div class="nav-actions">
+        <select
+          id="langSelect"
+          class="form-select-eco"
+          style="padding: 9px 10px; font-size: 0.82rem"
+        >
+          <option value="en">🇬🇧 EN</option>
+          <option value="vi">🇻🇳 VI</option>
+          <option value="ar">🇸🇦 AR</option>
+        </select>
+        <button class="icon-btn" id="themeBtn" title="Theme">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <button class="icon-btn" id="searchBtn" title="Search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+        <button class="icon-btn" id="cartBtn" title="Cart">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span class="badge-c" id="cartCount">0</span>
+        </button>
+        <button class="icon-btn" id="userBtn" title="Account">
+          <i class="fa-solid fa-user"></i>
+        </button>
+        <button class="icon-btn mobile-toggle" id="navToggle">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </nav>
+
+    <main id="app">
+      <!-- ====================== HOME VIEW ====================== -->
+      <section class="view active" id="view-home">
+        <div class="hero">
+          <div class="container-eco">
+            <div class="hero-grid">
+              <div>
+                <span class="hero-badge"
+                  ><i class="fa-solid fa-seedling"></i>
+                  <span data-i18n="hero.badge"
+                    >100% Certified Organic</span
+                  ></span
+                >
+                <h1>
+                  <span data-i18n="hero.title1">Eat clean,</span><br /><span
+                    class="gradient-text"
+                    data-i18n="hero.title2"
+                    >live green.</span
+                  >
+                </h1>
+                <p class="lead" data-i18n="hero.lead">
+                  Premium organic groceries and eco-friendly essentials, sourced
+                  directly from certified sustainable farms and delivered to
+                  your door.
+                </p>
+                <div
+                  style="
+                    display: flex;
+                    gap: 12px;
+                    flex-wrap: wrap;
+                    justify-content: flex-start;
+                  "
+                  id="heroCtas"
+                >
+                  <button class="btn-eco magnetic" onclick="navigateTo('shop')">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span data-i18n="hero.shop">Shop Now</span>
+                  </button>
+                  <button
+                    class="btn-ghost magnetic"
+                    onclick="navigateTo('about')"
+                  >
+                    <span data-i18n="hero.story">Our Story</span>
+                  </button>
+                </div>
+                <div class="hero-stats">
+                  <div class="stat">
+                    <strong>2,500+</strong
+                    ><span data-i18n="hero.s1">Organic products</span>
+                  </div>
+                  <div class="stat">
+                    <strong>180+</strong
+                    ><span data-i18n="hero.s2">Certified farms</span>
+                  </div>
+                  <div class="stat">
+                    <strong>98%</strong
+                    ><span data-i18n="hero.s3">Happy customers</span>
+                  </div>
+                </div>
+              </div>
+              <div class="hero-visual">
+                <div class="hero-card main">
+                  <h3 data-i18n="hero.cardT">Fresh from the farm</h3>
+                  <p data-i18n="hero.cardP">
+                    Harvested this morning, delivered today.
+                  </p>
+                </div>
+                <div class="hero-card float1">
+                  <div class="mini-prod">
+                    <img
+                      src="https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=200&q=80"
+                      alt="Avocado"
+                    />
+                    <div>
+                      <strong style="font-size: 0.85rem">Hass Avocado</strong
+                      ><br /><small>USDA Organic</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="hero-card float2">
+                  <div class="mini-prod">
+                    <img
+                      src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=200&q=80"
+                      alt="Honey"
+                    />
+                    <div>
+                      <strong style="font-size: 0.85rem">Raw Wild Honey</strong
+                      ><br /><small>EU Bio Certified</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container-eco">
+          <div class="features-bar">
+            <div class="feat">
+              <div class="feat-ico"><i class="fa-solid fa-truck-fast"></i></div>
+              <div>
+                <strong data-i18n="feat.1t">Free Shipping</strong
+                ><span data-i18n="feat.1s">On orders over $50</span>
+              </div>
+            </div>
+            <div class="feat">
+              <div class="feat-ico"><i class="fa-solid fa-leaf"></i></div>
+              <div>
+                <strong data-i18n="feat.2t">100% Organic</strong
+                ><span data-i18n="feat.2s">Certified sources</span>
+              </div>
+            </div>
+            <div class="feat">
+              <div class="feat-ico"><i class="fa-solid fa-recycle"></i></div>
+              <div>
+                <strong data-i18n="feat.3t">Eco Packaging</strong
+                ><span data-i18n="feat.3s">Zero plastic waste</span>
+              </div>
+            </div>
+            <div class="feat">
+              <div class="feat-ico">
+                <i class="fa-solid fa-shield-halved"></i>
+              </div>
+              <div>
+                <strong data-i18n="feat.4t">Secure Payment</strong
+                ><span data-i18n="feat.4s">QR, USDT, PayPal</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="container-eco">
+            <div class="section-head">
+              <div class="eyebrow" data-i18n="cats.eye">Browse</div>
+              <h2 data-i18n="cats.title">Shop by category</h2>
+              <p data-i18n="cats.lead">
+                Curated collections of certified organic and sustainable
+                products.
+              </p>
+            </div>
+            <div class="products-grid" id="categoryTiles"></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="container-eco">
+            <div class="section-head">
+              <div class="eyebrow" data-i18n="feat2.eye">Featured</div>
+              <h2 data-i18n="feat2.title">This week's bestsellers</h2>
+              <p data-i18n="feat2.lead">
+                Top picks loved by our eco-conscious community.
+              </p>
+            </div>
+            <div class="products-grid" id="featuredGrid"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================== SHOP VIEW ====================== -->
+      <section class="view" id="view-shop">
+        <div style="padding: 130px 0 30px">
+          <div class="container-eco">
+            <div class="section-head" style="margin-bottom: 30px">
+              <div class="eyebrow" data-i18n="shop.eye">Our Catalog</div>
+              <h2 data-i18n="shop.title">All organic products</h2>
+            </div>
+            <div class="chips" id="catChips"></div>
+            <div class="toolbar">
+              <div class="search-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input
+                  type="text"
+                  id="searchInput"
+                  placeholder="Search organic products..."
+                />
+              </div>
+              <select class="form-select-eco" id="filterCert">
+                <option value="" data-i18n="shop.allCerts">
+                  All Certifications
+                </option>
+              </select>
+              <select class="form-select-eco" id="filterSupplier">
+                <option value="" data-i18n="shop.allSuppliers">
+                  All Suppliers
+                </option>
+              </select>
+              <select class="form-select-eco" id="sortBy">
+                <option value="featured" data-i18n="shop.sort1">
+                  Featured
+                </option>
+                <option value="priceA" data-i18n="shop.sort2">Price ↑</option>
+                <option value="priceD" data-i18n="shop.sort3">Price ↓</option>
+                <option value="rating" data-i18n="shop.sort4">Rating</option>
+              </select>
+            </div>
+            <div class="products-grid" id="shopGrid"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================== CATEGORIES VIEW ====================== -->
+      <section class="view" id="view-categories">
+        <div style="padding: 130px 0 30px">
+          <div class="container-eco">
+            <div class="section-head">
+              <div class="eyebrow" data-i18n="cat.eye">Browse All</div>
+              <h2 data-i18n="cat.title">All Categories</h2>
+            </div>
+            <div class="products-grid" id="allCatTiles"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================== CHECKOUT VIEW ====================== -->
+      <section class="view" id="view-checkout">
+        <div style="padding: 130px 0 30px">
+          <div class="container-eco">
+            <div
+              class="section-head"
+              style="margin-bottom: 30px; text-align: left"
+            >
+              <h2 data-i18n="co.title">Checkout</h2>
+              <p data-i18n="co.lead">
+                Complete your eco-friendly order in a few steps.
+              </p>
+            </div>
+            <div class="co-grid">
+              <div>
+                <div class="panel" id="coStep1">
+                  <div class="co-step active">
+                    <div class="n">1</div>
+                    <strong data-i18n="co.s1">Shipping details</strong>
+                  </div>
+                  <div
+                    class="row"
+                    style="
+                      display: grid;
+                      grid-template-columns: 1fr 1fr;
+                      gap: 12px;
+                      margin-top: 14px;
+                    "
+                  >
+                    <div class="input-eco">
+                      <input id="co_name" placeholder=" " required /><label
+                        >Full name</label
+                      >
+                    </div>
+                    <div class="input-eco">
+                      <input id="co_phone" placeholder=" " required /><label
+                        >Phone</label
+                      >
+                    </div>
+                    <div class="input-eco" style="grid-column: 1/-1">
+                      <input id="co_email" placeholder=" " required /><label
+                        >Email</label
+                      >
+                    </div>
+                    <div class="input-eco" style="grid-column: 1/-1">
+                      <input id="co_address" placeholder=" " required /><label
+                        >Street address</label
+                      >
+                    </div>
+                    <div class="input-eco">
+                      <input id="co_city" placeholder=" " required /><label
+                        >City</label
+                      >
+                    </div>
+                    <div class="input-eco">
+                      <input id="co_zip" placeholder=" " /><label
+                        >ZIP code</label
+                      >
+                    </div>
+                  </div>
+                  <div class="input-eco" style="margin-top: 8px">
+                    <input id="co_note" placeholder=" " /><label
+                      >Order note (optional)</label
+                    >
+                  </div>
+                </div>
+                <div class="panel">
+                  <div class="co-step active">
+                    <div class="n">2</div>
+                    <strong data-i18n="co.s2">Delivery method</strong>
+                  </div>
+                  <div class="pay-tabs" id="shipTabs" style="margin-top: 14px">
+                    <div class="pay-tab active" data-ship="ghn">
+                      <i class="fa-solid fa-truck"></i>GHN<br /><small
+                        >$3.99 · 2-3d</small
+                      >
+                    </div>
+                    <div class="pay-tab" data-ship="ghtk">
+                      <i class="fa-solid fa-truck-fast"></i>GHTK<br /><small
+                        >$4.99 · 1-2d</small
+                      >
+                    </div>
+                    <div class="pay-tab" data-ship="viettel">
+                      <i class="fa-solid fa-motorcycle"></i>Viettel<br /><small
+                        >$5.99 · 1d</small
+                      >
+                    </div>
+                    <div class="pay-tab" data-ship="jt">
+                      <i class="fa-solid fa-plane"></i>J&T<br /><small
+                        >$6.99 · Same day</small
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="panel">
+                  <div class="co-step active">
+                    <div class="n">3</div>
+                    <strong data-i18n="co.s3">Payment method</strong>
+                  </div>
+                  <div class="pay-tabs" id="payTabs" style="margin-top: 14px">
+                    <div class="pay-tab active" data-pay="qr">
+                      <i class="fa-solid fa-qrcode"></i>QR Banking
+                    </div>
+                    <div class="pay-tab" data-pay="paypal">
+                      <i class="fa-brands fa-paypal"></i>PayPal
+                    </div>
+                    <div class="pay-tab" data-pay="usdt">
+                      <i class="fa-brands fa-bitcoin"></i>USDT
+                    </div>
+                    <div class="pay-tab" data-pay="cod">
+                      <i class="fa-solid fa-money-bill-wave"></i>COD
+                    </div>
+                  </div>
+                  <div id="payArea" style="margin-top: 14px"></div>
+                </div>
+              </div>
+              <div>
+                <div class="summary-card">
+                  <h5 style="font-weight: 800" data-i18n="co.sum">
+                    Order summary
+                  </h5>
+                  <div
+                    id="coSummary"
+                    style="margin: 14px 0; max-height: 280px; overflow: auto"
+                  ></div>
+                  <div class="input-eco" style="margin: 14px 0 6px">
+                    <input id="co_promo" placeholder=" " /><label
+                      >Promo code (try ECO10)</label
+                    >
+                  </div>
+                  <button
+                    class="btn-ghost"
+                    style="width: 100%; margin-bottom: 10px"
+                    onclick="applyPromo()"
+                  >
+                    Apply
+                  </button>
+                  <div id="coTotals"></div>
+                  <button
+                    class="btn-eco"
+                    style="
+                      width: 100%;
+                      justify-content: center;
+                      margin-top: 14px;
+                      font-size: 1.05rem;
+                      padding: 14px;
+                    "
+                    onclick="placeOrder()"
+                  >
+                    <i class="fa-solid fa-lock"></i>
+                    <span data-i18n="co.place">Place order</span>
+                  </button>
+                  <p
+                    style="
+                      font-size: 0.78rem;
+                      color: var(--muted);
+                      text-align: center;
+                      margin-top: 10px;
+                    "
+                  >
+                    <i class="fa-solid fa-shield-halved"></i> Secure 256-bit SSL
+                    encryption
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================== PROFILE VIEW ====================== -->
+      <section class="view" id="view-profile">
+        <div style="padding: 130px 0 30px">
+          <div class="container-eco">
+            <div class="profile-grid">
+              <div class="profile-side">
+                <div class="avatar-big" id="profAvatar"></div>
+                <h4
+                  style="
+                    text-align: center;
+                    margin: 14px 0 2px;
+                    font-weight: 800;
+                  "
+                  id="profName"
+                >
+                  User
+                </h4>
+                <p
+                  style="
+                    text-align: center;
+                    color: var(--muted);
+                    margin: 0;
+                    font-size: 0.85rem;
+                  "
+                  id="profEmail"
+                ></p>
+                <ul class="profile-tabs" id="profTabs">
+                  <li class="active" data-ptab="info">
+                    <i class="fa-solid fa-user"></i>Profile
+                  </li>
+                  <li data-ptab="orders">
+                    <i class="fa-solid fa-box"></i>My Orders
+                  </li>
+                  <li data-ptab="avatar">
+                    <i class="fa-solid fa-image"></i>Change Avatar
+                  </li>
+                  <li data-ptab="security">
+                    <i class="fa-solid fa-lock"></i>Security
+                  </li>
+                  <li data-ptab="logout">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>Logout
+                  </li>
+                </ul>
+              </div>
+              <div class="profile-main" id="profMain"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================== TRACKING VIEW ====================== -->
+      <section class="view" id="view-tracking">
+        <div style="padding: 130px 0 30px">
+          <div class="container-eco">
+            <div class="section-head">
+              <div class="eyebrow" data-i18n="track.eye">Tracking</div>
+              <h2 data-i18n="track.title">Track your order</h2>
+            </div>
+            <div class="panel" style="max-width: 720px; margin: 0 auto">
+              <div style="display: flex; gap: 10px">
+                <div class="search-wrap" style="flex: 1">
+                  <i class="fa-solid fa-barcode"></i
+                  ><input
+                    id="trackInput"
+                    placeholder="Enter Order ID e.g. ECO-1001"
+                  />
+                </div>
+                <button class="btn-eco" onclick="trackOrder()">
+                  <i class="fa-solid fa-magnifying-glass"></i> Track
+                </button>
+              </div>
+              <div id="trackResult" style="margin-top: 18px"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================== ABOUT VIEW ====================== -->
+      <section class="view" id="view-about">
+        <div style="padding: 130px 0 30px">
+          <div class="container-eco">
+            <div class="section-head">
+              <div class="eyebrow" data-i18n="about.eye">About us</div>
+              <h2 data-i18n="about.title">Eco-conscious by design</h2>
+              <p data-i18n="about.lead">
+                EcoShop connects you with certified organic farms and ethical
+                suppliers worldwide. We obsess about traceability, fair-trade
+                pricing, and zero-plastic delivery.
+              </p>
+            </div>
+            <div class="products-grid">
+              <div class="cat-tile">
+                <i class="fa-solid fa-seedling"></i
+                ><strong data-i18n="about.t1">Sustainable farming</strong
+                ><small data-i18n="about.t1s"
+                  >Regenerative agriculture, no pesticides</small
+                >
+              </div>
+              <div class="cat-tile">
+                <i class="fa-solid fa-handshake"></i
+                ><strong data-i18n="about.t2">Fair trade</strong
+                ><small data-i18n="about.t2s"
+                  >Direct relationships with farmers</small
+                >
+              </div>
+              <div class="cat-tile">
+                <i class="fa-solid fa-leaf"></i
+                ><strong data-i18n="about.t3">Carbon neutral</strong
+                ><small data-i18n="about.t3s">Offset every shipment</small>
+              </div>
+              <div class="cat-tile">
+                <i class="fa-solid fa-heart"></i
+                ><strong data-i18n="about.t4">Community first</strong
+                ><small data-i18n="about.t4s">1% of revenue donated</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================== ADMIN VIEW ====================== -->
+      <section class="view" id="view-admin">
+        <div class="admin-shell">
+          <aside class="admin-side" id="adminSide">
+            <div class="logo-a">
+              <div class="brand-logo"><i class="fa-solid fa-leaf"></i></div>
+              EcoShop Admin
+            </div>
+            <div class="admin-nav active" data-atab="dashboard">
+              <i class="fa-solid fa-gauge-high"></i>Dashboard
+            </div>
+            <div class="admin-nav" data-atab="products">
+              <i class="fa-solid fa-box-open"></i>Products
+            </div>
+            <div class="admin-nav" data-atab="orders">
+              <i class="fa-solid fa-receipt"></i>Orders
+            </div>
+            <div class="admin-nav" data-atab="users">
+              <i class="fa-solid fa-users"></i>Users
+            </div>
+            <div class="admin-nav" data-atab="suppliers">
+              <i class="fa-solid fa-truck-arrow-right"></i>Suppliers
+            </div>
+            <div class="admin-nav" data-atab="certs">
+              <i class="fa-solid fa-certificate"></i>Certifications
+            </div>
+            <div class="admin-nav" data-atab="analytics">
+              <i class="fa-solid fa-chart-line"></i>Analytics
+            </div>
+            <div class="admin-nav" data-atab="settings">
+              <i class="fa-solid fa-gear"></i>Settings
+            </div>
+            <div style="margin-top: auto">
+              <div class="admin-nav" onclick="navigateTo('home')">
+                <i class="fa-solid fa-arrow-left"></i>Back to store
+              </div>
+            </div>
+          </aside>
+          <div class="admin-main" id="adminMain"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ===== FOOTER (hidden in admin) ===== -->
+    <footer id="footerMain">
+      <div class="container-eco">
+        <div class="f-grid">
+          <div class="f-col">
+            <div class="brand" style="color: #fff">
+              <div class="brand-logo"><i class="fa-solid fa-leaf"></i></div>
+              EcoShop
+            </div>
+            <p style="margin-top: 12px">
+              Premium organic and eco-friendly products delivered with care.
+              Building a sustainable future, one order at a time.
+            </p>
+            <div class="f-social">
+              <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+              <a href="#"><i class="fa-brands fa-instagram"></i></a>
+              <a href="#"><i class="fa-brands fa-twitter"></i></a>
+              <a href="#"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+          </div>
+          <div class="f-col">
+            <h5>Shop</h5>
+            <a href="#" onclick="navigateTo('shop')">All Products</a>
+            <a href="#" onclick="navigateTo('categories')">Categories</a>
+            <a href="#" onclick="navigateTo('tracking')">Track order</a>
+            <a href="#" onclick="navigateTo('about')">About us</a>
+          </div>
+          <div class="f-col">
+            <h5>Legal</h5>
+            <a href="#" onclick="openPolicy('legal')">Legal Policy</a>
+            <a href="#" onclick="openPolicy('terms')">Terms of Use</a>
+            <a href="#" onclick="openPolicy('privacy')">Privacy Policy</a>
+            <a href="#" onclick="openPolicy('shipping')">Shipping Policy</a>
+            <a href="#" onclick="openPolicy('refund')">Refund Policy</a>
+          </div>
+          <div class="f-col f-newsletter">
+            <h5>Stay green with us</h5>
+            <p>Get organic recipes, eco-tips, and exclusive offers.</p>
+            <input type="email" id="newsEmail" placeholder="your@email.com" />
+            <button class="btn-eco" onclick="subscribeNews()">
+              <i class="fa-solid fa-paper-plane"></i> Subscribe
+            </button>
+          </div>
+        </div>
+        <div class="f-bot">
+          © <span id="yr"></span> EcoShop. All rights reserved. ·
+          <strong>Trang Web được phát triển bởi nhóm 2</strong>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ===== OVERLAY ===== -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- ===== CART DRAWER ===== -->
+    <aside class="drawer" id="cartDrawer">
+      <div class="drawer-head">
+        <h3>
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span data-i18n="cart.title">Your Cart</span>
+        </h3>
+        <button class="icon-btn" onclick="closeDrawers()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="drawer-body" id="cartBody"></div>
+      <div class="drawer-foot" id="cartFoot"></div>
+    </aside>
+
+    <!-- ===== AUTH MODAL ===== -->
+    <div class="eco-modal" id="authModal">
+      <div class="eco-modal-bg" onclick="closeModal('authModal')"></div>
+      <div class="eco-modal-content">
+        <button class="modal-close" onclick="closeModal('authModal')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="auth-grid">
+          <div class="auth-side">
+            <div>
+              <div class="brand" style="color: #fff">
+                <div
+                  class="brand-logo"
+                  style="background: rgba(255, 255, 255, 0.2)"
+                >
+                  <i class="fa-solid fa-leaf"></i>
+                </div>
+                EcoShop
+              </div>
+              <h2 style="margin-top: 30px" data-i18n="auth.welcome">
+                Welcome to a greener you
+              </h2>
+              <p data-i18n="auth.lead">
+                Join 50,000+ eco-conscious shoppers buying certified organic
+                products.
+              </p>
+              <ul>
+                <li>
+                  <i class="fa-solid fa-check-circle"></i> Exclusive member
+                  discounts
+                </li>
+                <li>
+                  <i class="fa-solid fa-check-circle"></i> Free shipping over
+                  $50
+                </li>
+                <li>
+                  <i class="fa-solid fa-check-circle"></i> Track every order
+                  live
+                </li>
+                <li>
+                  <i class="fa-solid fa-check-circle"></i> Eco-rewards program
+                </li>
+              </ul>
+            </div>
+            <small style="opacity: 0.85"
+              >🌱 Plant a tree on first purchase.</small
+            >
+          </div>
+          <div class="auth-form-wrap" id="authFormWrap"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PRODUCT MODAL ===== -->
+    <div class="eco-modal" id="productModal">
+      <div class="eco-modal-bg" onclick="closeModal('productModal')"></div>
+      <div class="eco-modal-content">
+        <button class="modal-close" onclick="closeModal('productModal')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div id="productModalBody"></div>
+      </div>
+    </div>
+
+    <!-- ===== GENERIC MODAL ===== -->
+    <div class="eco-modal" id="genericModal">
+      <div class="eco-modal-bg" onclick="closeModal('genericModal')"></div>
+      <div class="eco-modal-content md">
+        <button class="modal-close" onclick="closeModal('genericModal')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div id="genericBody" style="padding: 30px"></div>
+      </div>
+    </div>
+
+    <!-- ===== SEARCH MODAL ===== -->
+    <div class="eco-modal" id="searchModal">
+      <div class="eco-modal-bg" onclick="closeModal('searchModal')"></div>
+      <div class="eco-modal-content md">
+        <button class="modal-close" onclick="closeModal('searchModal')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div style="padding: 30px">
+          <h4 style="font-weight: 800">Quick search</h4>
+          <div class="search-wrap" style="margin: 14px 0">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input
+              type="text"
+              id="qSearch"
+              placeholder="Search organic products..."
+            />
+          </div>
+          <div id="qSearchResults"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ORDER SUCCESS MODAL ===== -->
+    <div class="eco-modal" id="successModal">
+      <div class="eco-modal-bg"></div>
+      <div
+        class="eco-modal-content sm"
+        style="text-align: center; padding: 40px 30px"
+      >
+        <div
+          style="
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: var(--grad);
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: #fff;
+            animation: popIn 0.6s ease;
+          "
+        >
+          <i class="fa-solid fa-check"></i>
+        </div>
+        <h3 style="font-weight: 800">Order placed!</h3>
+        <p style="color: var(--muted)">
+          Your order <strong id="successOid"></strong> has been confirmed.<br />We'll
+          send updates to your email.
+        </p>
+        <div
+          style="
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 18px;
+            flex-wrap: wrap;
+          "
+        >
+          <button
+            class="btn-ghost"
+            onclick="
+              closeModal('successModal');
+              navigateTo('tracking');
+              $('#trackInput').val($('#successOid').text());
+              trackOrder();
+            "
+          >
+            Track order
+          </button>
+          <button
+            class="btn-eco"
+            onclick="
+              closeModal('successModal');
+              navigateTo('home');
+            "
+          >
+            Continue shopping
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      /* =====================================================================
+   ECOSHOP - APPLICATION
+   ===================================================================== */
+
+      /* ---------------- I18N ---------------- */
+      const I18N = {
+        en: {
+          "nav.home": "Home",
+          "nav.shop": "Shop",
+          "nav.categories": "Categories",
+          "nav.tracking": "Tracking",
+          "nav.about": "About",
+          "hero.badge": "100% Certified Organic",
+          "hero.title1": "Eat clean,",
+          "hero.title2": "live green.",
+          "hero.lead":
+            "Premium organic groceries and eco-friendly essentials, sourced directly from certified sustainable farms and delivered to your door.",
+          "hero.shop": "Shop Now",
+          "hero.story": "Our Story",
+          "hero.s1": "Organic products",
+          "hero.s2": "Certified farms",
+          "hero.s3": "Happy customers",
+          "hero.cardT": "Fresh from the farm",
+          "hero.cardP": "Harvested this morning, delivered today.",
+          "feat.1t": "Free Shipping",
+          "feat.1s": "On orders over $50",
+          "feat.2t": "100% Organic",
+          "feat.2s": "Certified sources",
+          "feat.3t": "Eco Packaging",
+          "feat.3s": "Zero plastic waste",
+          "feat.4t": "Secure Payment",
+          "feat.4s": "QR, USDT, PayPal",
+          "cats.eye": "Browse",
+          "cats.title": "Shop by category",
+          "cats.lead":
+            "Curated collections of certified organic and sustainable products.",
+          "feat2.eye": "Featured",
+          "feat2.title": "This week's bestsellers",
+          "feat2.lead": "Top picks loved by our eco-conscious community.",
+          "shop.eye": "Our Catalog",
+          "shop.title": "All organic products",
+          "shop.sort1": "Featured",
+          "shop.sort2": "Price ↑",
+          "shop.sort3": "Price ↓",
+          "shop.sort4": "Rating",
+          "cart.title": "Your Cart",
+          "co.title": "Checkout",
+          "co.lead": "Complete your eco-friendly order in a few steps.",
+          "co.s1": "Shipping details",
+          "co.s2": "Delivery method",
+          "co.s3": "Payment method",
+          "co.sum": "Order summary",
+          "co.place": "Place order",
+          "track.title": "Track your order",
+          "track.eye": "Tracking",
+          "cat.eye": "Browse All",
+          "cat.title": "All Categories",
+          "about.eye": "About us",
+          "about.title": "Eco-conscious by design",
+          "about.lead":
+            "EcoShop connects you with certified organic farms and ethical suppliers worldwide. We obsess about traceability, fair-trade pricing, and zero-plastic delivery.",
+          "shop.allCerts": "All Certifications",
+          "shop.allSuppliers": "All Suppliers",
+          "about.t1": "Sustainable farming",
+          "about.t1s": "Regenerative agriculture, no pesticides",
+          "about.t2": "Fair trade",
+          "about.t2s": "Direct relationships with farmers",
+          "about.t3": "Carbon neutral",
+          "about.t3s": "Offset every shipment",
+          "about.t4": "Community first",
+          "about.t4s": "1% of revenue donated",
+          "auth.welcome": "Welcome to a greener you",
+          "auth.lead":
+            "Join 50,000+ eco-conscious shoppers buying certified organic products.",
+        },
+        vi: {
+          "nav.home": "Trang chủ",
+          "nav.shop": "Cửa hàng",
+          "nav.categories": "Danh mục",
+          "nav.tracking": "Tra cứu",
+          "nav.about": "Giới thiệu",
+          "hero.badge": "100% Hữu cơ chứng nhận",
+          "hero.title1": "Ăn sạch,",
+          "hero.title2": "sống xanh.",
+          "hero.lead":
+            "Thực phẩm hữu cơ cao cấp và sản phẩm thân thiện môi trường, nhập trực tiếp từ trang trại bền vững.",
+          "hero.shop": "Mua ngay",
+          "hero.story": "Câu chuyện",
+          "hero.s1": "Sản phẩm hữu cơ",
+          "hero.s2": "Trang trại đạt chuẩn",
+          "hero.s3": "Khách hài lòng",
+          "hero.cardT": "Tươi từ nông trại",
+          "hero.cardP": "Thu hoạch sáng nay, giao trong ngày.",
+          "feat.1t": "Miễn phí giao",
+          "feat.1s": "Đơn từ 50$",
+          "feat.2t": "100% Hữu cơ",
+          "feat.2s": "Nguồn chứng nhận",
+          "feat.3t": "Bao bì xanh",
+          "feat.3s": "Không nhựa",
+          "feat.4t": "Thanh toán an toàn",
+          "feat.4s": "QR, USDT, PayPal",
+          "cats.eye": "Khám phá",
+          "cats.title": "Mua theo danh mục",
+          "cats.lead": "Tuyển chọn các sản phẩm hữu cơ và bền vững.",
+          "feat2.eye": "Nổi bật",
+          "feat2.title": "Bán chạy tuần này",
+          "feat2.lead": "Lựa chọn được yêu thích nhất.",
+          "shop.eye": "Danh mục",
+          "shop.title": "Tất cả sản phẩm hữu cơ",
+          "shop.sort1": "Nổi bật",
+          "shop.sort2": "Giá ↑",
+          "shop.sort3": "Giá ↓",
+          "shop.sort4": "Đánh giá",
+          "cart.title": "Giỏ hàng",
+          "co.title": "Thanh toán",
+          "co.lead": "Hoàn tất đơn hàng xanh của bạn.",
+          "co.s1": "Thông tin giao hàng",
+          "co.s2": "Phương thức giao",
+          "co.s3": "Phương thức thanh toán",
+          "co.sum": "Tóm tắt đơn",
+          "co.place": "Đặt hàng",
+          "track.title": "Theo dõi đơn hàng",
+          "track.eye": "Tra cứu",
+          "cat.eye": "Khám phá tất cả",
+          "cat.title": "Tất cả danh mục",
+          "about.eye": "Giới thiệu",
+          "about.title": "Thiết kế thân thiện môi trường",
+          "about.lead":
+            "EcoShop kết nối bạn với các trang trại hữu cơ được chứng nhận và nhà cung cấp đạo đức trên toàn thế giới. Chúng tôi chú trọng tính minh bạch, giá công bằng và giao hàng không nhựa.",
+          "shop.allCerts": "Tất cả chứng nhận",
+          "shop.allSuppliers": "Tất cả nhà cung cấp",
+          "about.t1": "Nông nghiệp bền vững",
+          "about.t1s": "Nông nghiệp tái sinh, không thuốc trừ sâu",
+          "about.t2": "Thương mại công bằng",
+          "about.t2s": "Mối quan hệ trực tiếp với nông dân",
+          "about.t3": "Trung hòa carbon",
+          "about.t3s": "Bù đắp mỗi lần vận chuyển",
+          "about.t4": "Cộng đồng trước tiên",
+          "about.t4s": "1% doanh thu được tặng",
+          "auth.welcome": "Chào mừng bạn đến EcoShop",
+          "auth.lead": "Tham gia 50.000+ khách hàng yêu thiên nhiên.",
+        },
+        ar: {
+          "nav.home": "الرئيسية",
+          "nav.shop": "المتجر",
+          "nav.categories": "الفئات",
+          "nav.tracking": "التتبع",
+          "nav.about": "من نحن",
+          "hero.badge": "عضوي معتمد 100٪",
+          "hero.title1": "كل صحي،",
+          "hero.title2": "عش أخضر.",
+          "hero.lead":
+            "بقالة عضوية فاخرة ومنتجات صديقة للبيئة، من مزارع مستدامة معتمدة إلى باب منزلك.",
+          "hero.shop": "تسوق الآن",
+          "hero.story": "قصتنا",
+          "hero.s1": "منتجات عضوية",
+          "hero.s2": "مزارع معتمدة",
+          "hero.s3": "عملاء سعداء",
+          "hero.cardT": "طازج من المزرعة",
+          "hero.cardP": "حُصد هذا الصباح، وسُلم اليوم.",
+          "feat.1t": "شحن مجاني",
+          "feat.1s": "للطلبات فوق 50$",
+          "feat.2t": "عضوي 100٪",
+          "feat.2s": "مصادر معتمدة",
+          "feat.3t": "تغليف بيئي",
+          "feat.3s": "بدون بلاستيك",
+          "feat.4t": "دفع آمن",
+          "feat.4s": "QR، USDT، PayPal",
+          "cats.eye": "تصفح",
+          "cats.title": "تسوق حسب الفئة",
+          "cats.lead": "مجموعات منتقاة من المنتجات العضوية المستدامة.",
+          "feat2.eye": "المميز",
+          "feat2.title": "الأكثر مبيعاً هذا الأسبوع",
+          "feat2.lead": "اختيارات يحبها مجتمعنا.",
+          "shop.eye": "المتجر",
+          "shop.title": "جميع المنتجات العضوية",
+          "shop.sort1": "المميز",
+          "shop.sort2": "السعر ↑",
+          "shop.sort3": "السعر ↓",
+          "shop.sort4": "التقييم",
+          "cart.title": "سلتك",
+          "co.title": "الدفع",
+          "co.lead": "أكمل طلبك الصديق للبيئة.",
+          "co.s1": "تفاصيل الشحن",
+          "co.s2": "طريقة التوصيل",
+          "co.s3": "طريقة الدفع",
+          "co.sum": "ملخص الطلب",
+          "co.place": "تأكيد الطلب",
+          "track.title": "تتبع طلبك",
+          "track.eye": "التتبع",
+          "cat.eye": "تصفح الجميع",
+          "cat.title": "جميع الفئات",
+          "about.eye": "من نحن",
+          "about.title": "مصمم بعناية للبيئة",
+          "about.lead":
+            "تربط EcoShop بينك وبين مزارع عضوية معتمدة وموردين أخلاقيين في جميع أنحاء العالم. نحن نهتم بالشفافية والأسعار العادلة والتوصيل الخالي من البلاستيك.",
+          "shop.allCerts": "جميع الشهادات",
+          "shop.allSuppliers": "جميع الموردين",
+          "about.t1": "الزراعة المستدامة",
+          "about.t1s": "الزراعة المجددة، بدون مبيدات حشرية",
+          "about.t2": "التجارة العادلة",
+          "about.t2s": "علاقات مباشرة مع المزارعين",
+          "about.t3": "محايد الكربون",
+          "about.t3s": "معادل لكل شحنة",
+          "about.t4": "المجتمع أولاً",
+          "about.t4s": "1% من الإيرادات مُهداة",
+          "auth.welcome": "مرحبًا بك في حياة أكثر اخضرارًا",
+          "auth.lead": "انضم إلى 50,000+ متسوق يهتم بالبيئة.",
+        },
+      };
+      let LANG = localStorage.getItem("eco_lang") || "en";
+      function applyI18n() {
+        const dict = I18N[LANG] || I18N.en;
+        document.documentElement.lang = LANG;
+        document.documentElement.dir = LANG === "ar" ? "rtl" : "ltr";
+        $("[data-i18n]").each(function () {
+          const k = $(this).data("i18n");
+          if (dict[k]) $(this).text(dict[k]);
+        });
+        $("#langSelect").val(LANG);
+      }
+
+      /* ---------------- DATABASE ---------------- */
+      const DB_KEY = "ecoshop_db_v1";
+      let DB = {
+        users: [],
+        products: [],
+        cart: [],
+        orders: [],
+        payments: [],
+        suppliers: [],
+        certifications: [],
+        tracking: [],
+        settings: {},
+        session: null,
+        favorites: [],
+        promo: null,
+      };
+
+      function saveDB() {
+        localStorage.setItem(DB_KEY, JSON.stringify(DB));
+      }
+      function loadDB() {
+        const raw = localStorage.getItem(DB_KEY);
+        if (raw) {
+          try {
+            DB = JSON.parse(raw);
+          } catch (e) {}
+        }
+        if (!DB.products || !DB.products.length) seedDB();
+      }
+      function createItem(coll, item) {
+        item.id =
+          item.id ||
+          coll.slice(0, 3).toUpperCase() +
+            "-" +
+            Date.now() +
+            Math.floor(Math.random() * 1000);
+        DB[coll].push(item);
+        saveDB();
+        return item;
+      }
+      function updateItem(coll, id, patch) {
+        const i = DB[coll].findIndex((x) => x.id === id);
+        if (i > -1) {
+          DB[coll][i] = { ...DB[coll][i], ...patch };
+          saveDB();
+        }
+      }
+      function deleteItem(coll, id) {
+        DB[coll] = DB[coll].filter((x) => x.id !== id);
+        saveDB();
+      }
+      function getItem(coll, id) {
+        return DB[coll].find((x) => x.id === id);
+      }
+
+      /* ---------------- SEED ---------------- */
+      function seedDB() {
+        DB.certifications = [
+          { id: "cert1", name: "USDA Organic", color: "#16A34A" },
+          { id: "cert2", name: "EU Bio", color: "#0ea5e9" },
+          { id: "cert3", name: "Rainforest Alliance", color: "#84cc16" },
+          { id: "cert4", name: "Fair Trade", color: "#f59e0b" },
+          { id: "cert5", name: "Non-GMO Verified", color: "#a855f7" },
+        ];
+        DB.suppliers = [
+          {
+            id: "sup1",
+            name: "GreenValley Farms",
+            country: "USA",
+            rating: 4.9,
+          },
+          {
+            id: "sup2",
+            name: "Mediterranean Bio",
+            country: "Italy",
+            rating: 4.8,
+          },
+          {
+            id: "sup3",
+            name: "Tropic Harvest Co.",
+            country: "Vietnam",
+            rating: 4.7,
+          },
+          { id: "sup4", name: "Andes Organics", country: "Peru", rating: 4.9 },
+          { id: "sup5", name: "Nordic Pure", country: "Sweden", rating: 4.8 },
+        ];
+        const cats = [
+          { id: "c1", name: "Fruits & Vegetables", icon: "fa-apple-whole" },
+          { id: "c2", name: "Pantry & Grains", icon: "fa-wheat-awn" },
+          { id: "c3", name: "Dairy & Eggs", icon: "fa-egg" },
+          { id: "c4", name: "Beverages", icon: "fa-mug-hot" },
+          { id: "c5", name: "Snacks", icon: "fa-cookie-bite" },
+          { id: "c6", name: "Home & Beauty", icon: "fa-soap" },
+        ];
+        DB.categories = cats;
+        const P = (
+          id,
+          name,
+          cat,
+          price,
+          old,
+          img,
+          cert,
+          sup,
+          stock,
+          origin,
+          rating,
+          featured,
+          desc,
+        ) => ({
+          id,
+          name,
+          category: cat,
+          price,
+          oldPrice: old,
+          image: img,
+          certificationId: cert,
+          supplierId: sup,
+          stock,
+          origin,
+          rating,
+          featured,
+          desc,
+          sold: Math.floor(Math.random() * 500) + 50,
+        });
+        DB.products = [
+          P(
+            "p1",
+            "Organic Hass Avocado",
+            "c1",
+            3.99,
+            4.99,
+            "https://images.unsplash.com/photo-1601039641847-7857b994d704?w=600&q=80",
+            "cert1",
+            "sup1",
+            120,
+            "California, USA",
+            4.8,
+            true,
+            "Creamy Hass avocados, harvested at peak ripeness.",
+          ),
+          P(
+            "p2",
+            "Wild Raw Honey 500g",
+            "c2",
+            12.5,
+            15.0,
+            "https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=600&q=80",
+            "cert2",
+            "sup2",
+            60,
+            "Tuscany, Italy",
+            4.9,
+            true,
+            "Unfiltered, unpasteurized raw wildflower honey.",
+          ),
+          P(
+            "p3",
+            "Heirloom Tomatoes 1kg",
+            "c1",
+            5.49,
+            null,
+            "https://images.unsplash.com/photo-1582284540020-8acbe03f4924?w=600&q=80",
+            "cert1",
+            "sup1",
+            80,
+            "California, USA",
+            4.7,
+            true,
+            "Mixed heirloom varieties, vine-ripened.",
+          ),
+          P(
+            "p4",
+            "Quinoa Rainbow 500g",
+            "c2",
+            7.2,
+            8.5,
+            "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80",
+            "cert5",
+            "sup4",
+            200,
+            "Cusco, Peru",
+            4.9,
+            true,
+            "Tri-color quinoa, high protein, gluten-free.",
+          ),
+          P(
+            "p5",
+            "Cold-Pressed Olive Oil 750ml",
+            "c2",
+            18.9,
+            22.0,
+            "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=600&q=80",
+            "cert2",
+            "sup2",
+            45,
+            "Sicily, Italy",
+            5.0,
+            true,
+            "Single-origin extra virgin olive oil.",
+          ),
+          P(
+            "p6",
+            "Organic Bananas 1kg",
+            "c1",
+            2.49,
+            null,
+            "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=600&q=80",
+            "cert3",
+            "sup3",
+            300,
+            "Mekong, Vietnam",
+            4.6,
+            false,
+            "Fair trade certified, naturally ripened.",
+          ),
+          P(
+            "p7",
+            "Almond Butter 340g",
+            "c5",
+            9.99,
+            11.5,
+            "https://images.unsplash.com/photo-1612257999928-44c2e93b35ff?w=600&q=80",
+            "cert1",
+            "sup1",
+            75,
+            "California, USA",
+            4.8,
+            false,
+            "100% raw almonds, no added sugar.",
+          ),
+          P(
+            "p8",
+            "Matcha Green Tea 100g",
+            "c4",
+            24.0,
+            28.0,
+            "https://images.unsplash.com/photo-1582793988951-9aed5509eb97?w=600&q=80",
+            "cert2",
+            "sup5",
+            55,
+            "Uji, Japan",
+            4.9,
+            true,
+            "Ceremonial grade stone-ground matcha.",
+          ),
+          P(
+            "p9",
+            "Free-Range Eggs (12)",
+            "c3",
+            6.2,
+            null,
+            "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=600&q=80",
+            "cert1",
+            "sup1",
+            90,
+            "Vermont, USA",
+            4.7,
+            false,
+            "Pasture-raised, organic-fed hens.",
+          ),
+          P(
+            "p10",
+            "Cashew Milk 1L",
+            "c3",
+            4.5,
+            null,
+            "https://images.unsplash.com/photo-1626078299034-94a4dadd6e8e?w=600&q=80",
+            "cert5",
+            "sup3",
+            110,
+            "Vietnam",
+            4.5,
+            false,
+            "Unsweetened, no carrageenan.",
+          ),
+          P(
+            "p11",
+            "Dark Chocolate 70% 100g",
+            "c5",
+            5.8,
+            7.0,
+            "https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=600&q=80",
+            "cert4",
+            "sup4",
+            180,
+            "Andes, Peru",
+            4.8,
+            true,
+            "Single-origin fair trade cacao.",
+          ),
+          P(
+            "p12",
+            "Cold Brew Coffee 250g",
+            "c4",
+            16.5,
+            null,
+            "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=600&q=80",
+            "cert3",
+            "sup4",
+            65,
+            "Cajamarca, Peru",
+            4.7,
+            false,
+            "Slow-roasted arabica beans.",
+          ),
+          P(
+            "p13",
+            "Bamboo Toothbrush Set",
+            "c6",
+            8.99,
+            12.0,
+            "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=600&q=80",
+            "cert3",
+            "sup3",
+            250,
+            "Vietnam",
+            4.6,
+            false,
+            "4-pack biodegradable bamboo toothbrushes.",
+          ),
+          P(
+            "p14",
+            "Organic Strawberries 500g",
+            "c1",
+            6.99,
+            null,
+            "https://images.unsplash.com/photo-1543158181-e6f9f6712055?w=600&q=80",
+            "cert1",
+            "sup1",
+            70,
+            "California, USA",
+            4.8,
+            true,
+            "Sweet, sun-ripened strawberries.",
+          ),
+          P(
+            "p15",
+            "Whole Grain Oats 1kg",
+            "c2",
+            4.2,
+            5.0,
+            "https://images.unsplash.com/photo-1517673400267-0251440c45dc?w=600&q=80",
+            "cert5",
+            "sup5",
+            220,
+            "Sweden",
+            4.7,
+            false,
+            "Steel-cut rolled oats.",
+          ),
+          P(
+            "p16",
+            "Lavender Soap Bar",
+            "c6",
+            6.5,
+            null,
+            "https://images.unsplash.com/photo-1600857544200-b2f666a9a2ec?w=600&q=80",
+            "cert2",
+            "sup2",
+            140,
+            "Provence (Italy blend)",
+            4.9,
+            false,
+            "Handmade with cold-pressed oils.",
+          ),
+          P(
+            "p17",
+            "Greek Yogurt 500g",
+            "c3",
+            5.99,
+            null,
+            "https://images.unsplash.com/photo-1571212515416-fef01fc43637?w=600&q=80",
+            "cert2",
+            "sup2",
+            95,
+            "Italy",
+            4.6,
+            false,
+            "Strained, probiotic-rich whole milk yogurt.",
+          ),
+          P(
+            "p18",
+            "Hibiscus Tea 80g",
+            "c4",
+            9.4,
+            null,
+            "https://images.unsplash.com/photo-1597318267226-9da6e34d36e8?w=600&q=80",
+            "cert3",
+            "sup4",
+            88,
+            "Peru",
+            4.7,
+            false,
+            "Caffeine-free floral tea.",
+          ),
+          P(
+            "p19",
+            "Mixed Nuts Trail 400g",
+            "c5",
+            13.2,
+            15.0,
+            "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=600&q=80",
+            "cert5",
+            "sup1",
+            130,
+            "USA",
+            4.8,
+            true,
+            "Almonds, cashews, walnuts, cranberries.",
+          ),
+          P(
+            "p20",
+            "Organic Carrots 1kg",
+            "c1",
+            2.99,
+            null,
+            "https://images.unsplash.com/photo-1582515073490-39981397c445?w=600&q=80",
+            "cert1",
+            "sup1",
+            160,
+            "Vermont, USA",
+            4.5,
+            false,
+            "Sweet, crunchy baby carrots.",
+          ),
+          P(
+            "p21",
+            "Coconut Sugar 500g",
+            "c2",
+            5.5,
+            null,
+            "https://images.unsplash.com/photo-1610725663727-08695a1ac3d9?w=600&q=80",
+            "cert3",
+            "sup3",
+            180,
+            "Vietnam",
+            4.6,
+            false,
+            "Low-glycemic natural sweetener.",
+          ),
+          P(
+            "p22",
+            "Reusable Glass Straws (6)",
+            "c6",
+            11.99,
+            14.0,
+            "https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?w=600&q=80",
+            "cert3",
+            "sup5",
+            200,
+            "Sweden",
+            4.9,
+            false,
+            "Borosilicate glass with cleaning brush.",
+          ),
+        ];
+        DB.settings = {
+          currency: "$",
+          taxRate: 0.08,
+          freeShippingOver: 50,
+          shippingFees: {
+            ghn: 3.99,
+            ghtk: 4.99,
+            viettel: 5.99,
+            jt: 6.99,
+            cod: 0,
+          },
+        };
+        // demo admin user
+        DB.users = [
+          {
+            id: "U-admin",
+            username: "admin",
+            email: "admin@ecoshop.com",
+            phone: "",
+            fullName: "Admin",
+            password: "admin123",
+            role: "admin",
+            createdAt: Date.now(),
+            avatar: "A",
+            address: "HQ",
+          },
+        ];
+        // demo orders for tracking
+        DB.orders = [
+          {
+            id: "ECO-1001",
+            userId: "U-admin",
+            items: [
+              {
+                id: "p1",
+                qty: 2,
+                name: "Organic Hass Avocado",
+                price: 3.99,
+                image:
+                  "https://images.unsplash.com/photo-1601039641847-7857b994d704?w=200&q=80",
+              },
+            ],
+            total: 7.98,
+            status: "shipping",
+            carrier: "GHN",
+            createdAt: Date.now() - 86400000 * 2,
+            shipping: { name: "Demo", address: "123 Green St", city: "Hanoi" },
+            payment: "qr",
+          },
+        ];
+        saveDB();
+      }
+
+      /* ---------------- UTILS ---------------- */
+      const $ = window.jQuery;
+      const money = (n) =>
+        (DB.settings?.currency || "$") + Number(n || 0).toFixed(2);
+      const uid = (p = "ECO") =>
+        p + "-" + (1000 + Math.floor(Math.random() * 9000));
+      function toast(msg, type = "success", ms = 3000) {
+        const icons = {
+          success: "fa-circle-check",
+          error: "fa-circle-exclamation",
+          warn: "fa-triangle-exclamation",
+          info: "fa-circle-info",
+        };
+        const t = $(
+          `<div class="toast-eco ${type}"><i class="fa-solid ${icons[type]}"></i><span>${msg}</span></div>`,
+        );
+        $("#toasts").append(t);
+        setTimeout(() => {
+          t.css({ opacity: 0, transform: "translateX(40px)" });
+          setTimeout(() => t.remove(), 300);
+        }, ms);
+      }
+      function openModal(id) {
+        $("#" + id).addClass("show");
+        $("body").css("overflow", "hidden");
+      }
+      function closeModal(id) {
+        $("#" + id).removeClass("show");
+        $("body").css("overflow", "");
+      }
+      function openDrawer(id) {
+        $("#" + id).addClass("open");
+        $("#overlay").addClass("show");
+      }
+      function closeDrawers() {
+        $(".drawer").removeClass("open");
+        $("#overlay").removeClass("show");
+      }
+      function escapeHtml(s) {
+        return String(s || "").replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+      }
+
+      /* ---------------- NAVIGATION ---------------- */
+      function navigateTo(view) {
+        $(".view").removeClass("active");
+        $("#view-" + view).addClass("active");
+        $(".nav-links a").removeClass("active");
+        $(`.nav-links a[data-view="${view}"]`).addClass("active");
+        $("#footerMain").toggle(view !== "admin");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        $("#navLinks").removeClass("show");
+        if (view === "shop") renderShop();
+        if (view === "categories") renderAllCategories();
+        if (view === "checkout") renderCheckout();
+        if (view === "profile") renderProfile();
+        if (view === "admin") renderAdmin();
+      }
+
+      /* ---------------- PRODUCTS RENDER ---------------- */
+      function productCard(p) {
+        const cert = getItem("certifications", p.certificationId);
+        const sup = getItem("suppliers", p.supplierId);
+        const fav = DB.favorites.includes(p.id) ? "active" : "";
+        return `
+  <div class="product-card" data-id="${p.id}">
+    <div class="pc-img">
+      <img src="${p.image}" alt="${escapeHtml(p.name)}" loading="lazy" onerror="this.src='https://placehold.co/400x400/16A34A/fff?text=Organic'">
+      <div class="pc-badges">
+        ${p.oldPrice ? `<div class="pc-badge" style="background:#dc2626;color:#fff">-${Math.round((1 - p.price / p.oldPrice) * 100)}%</div>` : ""}
+        ${cert ? `<div class="pc-badge org"><i class="fa-solid fa-leaf"></i>${cert.name}</div>` : ""}
+      </div>
+      <div class="pc-menu" onclick="event.stopPropagation();showQuickInfo(event,'${p.id}')" title="Quick info">⋮</div>
+      <div class="pc-fav ${fav}" onclick="event.stopPropagation();toggleFav('${p.id}',this)"><i class="fa-solid fa-heart"></i></div>
+    </div>
+    <div class="pc-body">
+      <div class="pc-cat">${(getItem("categories", p.category) || {}).name || ""}</div>
+      <div class="pc-name">${escapeHtml(p.name)}</div>
+      <div class="pc-rating">${"★".repeat(Math.round(p.rating))}${"☆".repeat(5 - Math.round(p.rating))}<span>(${p.sold} sold)</span></div>
+      <div class="pc-foot">
+        <div class="pc-price">${money(p.price)}${p.oldPrice ? `<small>${money(p.oldPrice)}</small>` : ""}</div>
+        <button class="pc-add" onclick="event.stopPropagation();addToCart('${p.id}')" title="Add to cart"><i class="fa-solid fa-plus"></i></button>
+      </div>
+    </div>
+  </div>`;
+      }
+
+      function renderHomeCategories() {
+        const html = DB.categories
+          .map(
+            (c) => `
+    <div class="cat-tile" onclick="filterCategory('${c.id}')">
+      <i class="fa-solid ${c.icon}"></i>
+      <strong>${c.name}</strong>
+      <small>${DB.products.filter((p) => p.category === c.id).length} products</small>
+    </div>`,
+          )
+          .join("");
+        $("#categoryTiles").html(html);
+      }
+      function renderAllCategories() {
+        $("#allCatTiles").html(
+          DB.categories
+            .map(
+              (c) => `
+    <div class="cat-tile" onclick="filterCategory('${c.id}')">
+      <i class="fa-solid ${c.icon}"></i><strong>${c.name}</strong>
+      <small>${DB.products.filter((p) => p.category === c.id).length} products</small>
+    </div>`,
+            )
+            .join(""),
+        );
+      }
+      function renderFeatured() {
+        const items = DB.products.filter((p) => p.featured).slice(0, 8);
+        $("#featuredGrid").html(items.map(productCard).join(""));
+        observeCards("#featuredGrid");
+        bindCardClicks("#featuredGrid");
+      }
+
+      let SHOP_STATE = {
+        cat: "all",
+        search: "",
+        cert: "",
+        supplier: "",
+        sort: "featured",
+      };
+      function renderShopChips() {
+        const chips = [{ id: "all", name: "All" }, ...DB.categories];
+        $("#catChips").html(
+          chips
+            .map(
+              (c) =>
+                `<div class="chip ${SHOP_STATE.cat === c.id ? "active" : ""}" data-cat="${c.id}">${c.name}</div>`,
+            )
+            .join(""),
+        );
+        $("#filterCert").html(
+          '<option value="">All Certifications</option>' +
+            DB.certifications
+              .map((c) => `<option value="${c.id}">${c.name}</option>`)
+              .join(""),
+        );
+        $("#filterSupplier").html(
+          '<option value="">All Suppliers</option>' +
+            DB.suppliers
+              .map((s) => `<option value="${s.id}">${s.name}</option>`)
+              .join(""),
+        );
+      }
+      function renderShop() {
+        renderShopChips();
+        let list = DB.products.slice();
+        if (SHOP_STATE.cat !== "all")
+          list = list.filter((p) => p.category === SHOP_STATE.cat);
+        if (SHOP_STATE.search)
+          list = list.filter((p) =>
+            p.name.toLowerCase().includes(SHOP_STATE.search.toLowerCase()),
+          );
+        if (SHOP_STATE.cert)
+          list = list.filter((p) => p.certificationId === SHOP_STATE.cert);
+        if (SHOP_STATE.supplier)
+          list = list.filter((p) => p.supplierId === SHOP_STATE.supplier);
+        if (SHOP_STATE.sort === "priceA")
+          list.sort((a, b) => a.price - b.price);
+        if (SHOP_STATE.sort === "priceD")
+          list.sort((a, b) => b.price - a.price);
+        if (SHOP_STATE.sort === "rating")
+          list.sort((a, b) => b.rating - a.rating);
+        $("#shopGrid").html(
+          list.length
+            ? list.map(productCard).join("")
+            : `<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--muted)"><i class="fa-solid fa-box-open" style="font-size:3rem;color:var(--glow)"></i><p style="margin-top:14px">No products match your filters.</p></div>`,
+        );
+        observeCards("#shopGrid");
+        bindCardClicks("#shopGrid");
+      }
+      function filterCategory(id) {
+        SHOP_STATE.cat = id;
+        navigateTo("shop");
+      }
+
+      function observeCards(sel) {
+        const els = document.querySelectorAll(sel + " .product-card");
+        if (!("IntersectionObserver" in window)) {
+          els.forEach((e) => e.classList.add("in"));
+          return;
+        }
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e, i) => {
+              if (e.isIntersecting) {
+                setTimeout(() => e.target.classList.add("in"), i * 40);
+                io.unobserve(e.target);
+              }
+            });
+          },
+          { threshold: 0.15 },
+        );
+        els.forEach((e) => io.observe(e));
+      }
+      function bindCardClicks(sel) {
+        $(sel + " .product-card").on("click", function () {
+          openProduct($(this).data("id"));
+        });
+      }
+
+      /* ---------------- QUICK INFO POPUP ---------------- */
+      let quickPop = null;
+      function showQuickInfo(e, id) {
+        if (quickPop) {
+          quickPop.remove();
+          quickPop = null;
+        }
+        const p = getItem("products", id);
+        if (!p) return;
+        const sup = getItem("suppliers", p.supplierId);
+        const cert = getItem("certifications", p.certificationId);
+        const pop = $(`<div class="quick-popup">
+    <div class="qp-row"><span>Manufacturer</span><strong>${sup?.name || "—"}</strong></div>
+    <div class="qp-row"><span>Stock left</span><strong style="color:${p.stock < 30 ? "#dc2626" : "var(--secondary)"}">${p.stock} units</strong></div>
+    <div class="qp-row"><span>Certification</span><strong>${cert?.name || "—"}</strong></div>
+    <div class="qp-row"><span>Origin</span><strong>${p.origin}</strong></div>
+    <div class="qp-row"><span>Country</span><strong>${sup?.country || "—"}</strong></div>
+  </div>`);
+        $("body").append(pop);
+        const r = e.target.getBoundingClientRect();
+        pop.css({
+          top: r.bottom + window.scrollY + 8 + "px",
+          left: Math.max(10, r.right + window.scrollX - 260) + "px",
+          position: "absolute",
+        });
+        quickPop = pop;
+        setTimeout(() => {
+          $(document).one("click", () => {
+            pop.remove();
+            quickPop = null;
+          });
+        }, 10);
+      }
+
+      /* ---------------- PRODUCT MODAL ---------------- */
+      function openProduct(id) {
+        const p = getItem("products", id);
+        if (!p) return;
+        const sup = getItem("suppliers", p.supplierId);
+        const cert = getItem("certifications", p.certificationId);
+        const cat = getItem("categories", p.category);
+        $("#productModalBody").html(`
+    <div class="pm-grid">
+      <div class="pm-img"><img src="${p.image}" alt="${escapeHtml(p.name)}" onerror="this.src='https://placehold.co/600x600/16A34A/fff?text=Organic'"></div>
+      <div class="pm-body">
+        <div class="pc-cat">${cat?.name || ""}</div>
+        <h2>${escapeHtml(p.name)}</h2>
+        <div class="pc-rating" style="font-size:.95rem">${"★".repeat(Math.round(p.rating))}${"☆".repeat(5 - Math.round(p.rating))}<span>(${p.sold} sold)</span></div>
+        <p style="color:var(--muted);margin:10px 0">${escapeHtml(p.desc)}</p>
+        <div style="font-size:1.8rem;font-weight:800;color:var(--secondary);margin:10px 0">${money(p.price)} ${p.oldPrice ? `<small style="font-size:1rem;color:var(--muted);text-decoration:line-through">${money(p.oldPrice)}</small>` : ""}</div>
+        <div class="pm-meta">
+          <div><strong>Manufacturer</strong>${sup?.name || "—"}</div>
+          <div><strong>Origin</strong>${p.origin}</div>
+          <div><strong>Certification</strong>${cert?.name || "—"}</div>
+          <div><strong>Stock</strong>${p.stock} units</div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:18px">
+          <button class="btn-eco" style="flex:1;justify-content:center" onclick="addToCart('${p.id}');closeModal('productModal')"><i class="fa-solid fa-bag-shopping"></i> Add to cart</button>
+          <button class="btn-ghost" onclick="toggleFav('${p.id}')"><i class="fa-solid fa-heart"></i></button>
+        </div>
+      </div>
+    </div>`);
+        openModal("productModal");
+      }
+
+      /* ---------------- CART ---------------- */
+      function addToCart(id, qty = 1) {
+        const p = getItem("products", id);
+        if (!p) return;
+        const found = DB.cart.find((c) => c.id === id);
+        if (found) found.qty += qty;
+        else
+          DB.cart.push({
+            id,
+            qty,
+            name: p.name,
+            price: p.price,
+            image: p.image,
+          });
+        saveDB();
+        renderCart();
+        toast(`${p.name} added to cart`, "success");
+      }
+      function changeQty(id, delta) {
+        const c = DB.cart.find((c) => c.id === id);
+        if (!c) return;
+        c.qty += delta;
+        if (c.qty <= 0) DB.cart = DB.cart.filter((x) => x.id !== id);
+        saveDB();
+        renderCart();
+        renderCheckout();
+      }
+      function removeFromCart(id) {
+        DB.cart = DB.cart.filter((c) => c.id !== id);
+        saveDB();
+        renderCart();
+        renderCheckout();
+        toast("Removed from cart", "warn");
+      }
+      function cartTotals() {
+        const sub = DB.cart.reduce((s, c) => s + c.price * c.qty, 0);
+        const ship =
+          sub >= DB.settings.freeShippingOver
+            ? 0
+            : DB.settings.shippingFees[window.SHIP_METHOD || "ghn"] || 3.99;
+        let disc = 0;
+        if (DB.promo === "ECO10") disc = sub * 0.1;
+        const tax = (sub - disc) * DB.settings.taxRate;
+        const total = sub - disc + ship + tax;
+        return { sub, ship, disc, tax, total };
+      }
+      function renderCart() {
+        $("#cartCount").text(DB.cart.reduce((s, c) => s + c.qty, 0));
+        if (!DB.cart.length) {
+          $("#cartBody").html(
+            `<div class="cart-empty"><i class="fa-solid fa-bag-shopping"></i><p>Your cart is empty.<br>Start shopping organic!</p><button class="btn-eco" onclick="closeDrawers();navigateTo('shop')">Browse products</button></div>`,
+          );
+          $("#cartFoot").html("");
+          return;
+        }
+        $("#cartBody").html(
+          DB.cart
+            .map(
+              (c) => `
+    <div class="cart-item">
+      <img src="${c.image}" alt="" onerror="this.src='https://placehold.co/100/16A34A/fff?text=O'">
+      <div class="ci-info">
+        <strong>${escapeHtml(c.name)}</strong>
+        <small>${money(c.price)}</small>
+        <div style="margin-top:6px;display:flex;align-items:center;gap:8px">
+          <div class="qty"><button onclick="changeQty('${c.id}',-1)">−</button><span>${c.qty}</span><button onclick="changeQty('${c.id}',1)">+</button></div>
+          <button class="ci-remove" onclick="removeFromCart('${c.id}')"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </div>
+      <strong>${money(c.price * c.qty)}</strong>
+    </div>`,
+            )
+            .join(""),
+        );
+        const t = cartTotals();
+        $("#cartFoot").html(`
+    <div class="totals-row"><span>Subtotal</span><span>${money(t.sub)}</span></div>
+    <div class="totals-row"><span>Shipping</span><span>${t.ship ? money(t.ship) : "FREE"}</span></div>
+    ${t.disc ? `<div class="totals-row"><span>Discount</span><span style="color:#16A34A">−${money(t.disc)}</span></div>` : ""}
+    <div class="totals-row"><span>Tax (${(DB.settings.taxRate * 100).toFixed(0)}%)</span><span>${money(t.tax)}</span></div>
+    <div class="totals-row big"><span>Total</span><span>${money(t.total)}</span></div>
+    <button class="btn-eco" style="width:100%;justify-content:center;margin-top:12px" onclick="closeDrawers();navigateTo('checkout')"><i class="fa-solid fa-credit-card"></i> Checkout</button>
+  `);
+      }
+      function toggleFav(id, el) {
+        if (DB.favorites.includes(id)) {
+          DB.favorites = DB.favorites.filter((x) => x !== id);
+          toast("Removed from favorites", "info");
+        } else {
+          DB.favorites.push(id);
+          toast("Added to favorites", "success");
+        }
+        saveDB();
+        if (el) $(el).toggleClass("active");
+      }
+
+      /* ---------------- CHECKOUT ---------------- */
+      window.SHIP_METHOD = "ghn";
+      window.PAY_METHOD = "qr";
+      function renderCheckout() {
+        if (!DB.cart.length) {
+          $("#coSummary").html(
+            '<p style="color:var(--muted);text-align:center">Your cart is empty.</p>',
+          );
+          $("#coTotals").html("");
+          return;
+        }
+        $("#coSummary").html(
+          DB.cart
+            .map(
+              (c) => `
+    <div style="display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--border)">
+      <img src="${c.image}" style="width:50px;height:50px;border-radius:10px;object-fit:cover" onerror="this.src='https://placehold.co/60/16A34A/fff?text=O'">
+      <div style="flex:1;min-width:0"><strong style="display:block;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(c.name)}</strong><small style="color:var(--muted)">${c.qty} × ${money(c.price)}</small></div>
+      <strong style="font-size:.92rem">${money(c.price * c.qty)}</strong>
+    </div>`,
+            )
+            .join(""),
+        );
+        const t = cartTotals();
+        $("#coTotals").html(`
+    <div class="totals-row"><span>Subtotal</span><span>${money(t.sub)}</span></div>
+    <div class="totals-row"><span>Shipping</span><span>${t.ship ? money(t.ship) : "FREE"}</span></div>
+    ${t.disc ? `<div class="totals-row"><span>Discount</span><span style="color:#16A34A">−${money(t.disc)}</span></div>` : ""}
+    <div class="totals-row"><span>Tax</span><span>${money(t.tax)}</span></div>
+    <div class="totals-row big"><span>Total</span><span>${money(t.total)}</span></div>
+  `);
+        renderPayArea();
+      }
+      function applyPromo() {
+        const v = $("#co_promo").val().trim().toUpperCase();
+        if (v === "ECO10") {
+          DB.promo = "ECO10";
+          saveDB();
+          toast("Promo applied: 10% off", "success");
+        } else {
+          DB.promo = null;
+          saveDB();
+          toast("Invalid promo code", "error");
+        }
+        renderCheckout();
+      }
+      function renderPayArea() {
+        const total = cartTotals().total;
+        if (window.PAY_METHOD === "qr") {
+          $("#payArea").html(`
+      <div class="qr-box">
+        <p style="margin:0 0 10px;color:var(--muted)">Scan with your banking app to pay <strong>${money(total)}</strong></p>
+        <div id="qrcode"></div>
+        <div>QR expires in <span class="qr-timer" id="qrTimer">02:00</span></div>
+        <button class="btn-ghost" style="margin-top:10px" onclick="generateQR()"><i class="fa-solid fa-rotate"></i> Regenerate</button>
+        <button class="btn-eco" style="margin-top:10px;margin-left:6px" onclick="simulatePaySuccess()"><i class="fa-solid fa-check"></i> Simulate Paid</button>
+      </div>`);
+          generateQR();
+        } else if (window.PAY_METHOD === "paypal") {
+          $("#payArea").html(`
+      <div class="qr-box" style="background:#fff8e6">
+        <i class="fa-brands fa-paypal" style="font-size:3rem;color:#003087"></i>
+        <h5 style="margin:10px 0;font-weight:800">PayPal Checkout</h5>
+        <p style="color:var(--muted)">You'll be redirected to PayPal to complete <strong>${money(total)}</strong>.</p>
+        <button class="btn-eco" style="background:#ffc439;color:#003087" onclick="simulatePaySuccess()">Pay with PayPal</button>
+      </div>`);
+        } else if (window.PAY_METHOD === "usdt") {
+          $("#payArea").html(`
+      <div class="qr-box">
+        <h5 style="font-weight:800"><i class="fa-brands fa-bitcoin"></i> USDT Payment</h5>
+        <div style="display:flex;gap:8px;margin:10px 0;justify-content:center">
+          <button class="chip active" onclick="$(this).addClass('active').siblings().removeClass('active')">TRC20</button>
+          <button class="chip" onclick="$(this).addClass('active').siblings().removeClass('active')">ERC20</button>
+        </div>
+        <div id="usdtQR"></div>
+        <div class="wallet-row" style="margin-top:14px"><code id="usdtAddr">TXYZ1a2b3c4d5e6f7g8h9i0jkLmnopQRSTUVwx</code><button onclick="copyAddr()">Copy</button></div>
+        <p>Amount: <strong>${total.toFixed(2)} USDT</strong></p>
+        <div>Expires in <span class="qr-timer" id="usdtTimer">15:00</span></div>
+        <button class="btn-eco" style="margin-top:10px" onclick="simulatePaySuccess()">I've sent payment</button>
+      </div>`);
+          setTimeout(() => {
+            $("#usdtQR").empty();
+            new QRCode(document.getElementById("usdtQR"), {
+              text: `usdt:TXYZ?amount=${total.toFixed(2)}`,
+              width: 180,
+              height: 180,
+            });
+            startTimer("#usdtTimer", 15 * 60);
+          }, 50);
+        } else {
+          $("#payArea").html(
+            `<div class="qr-box"><i class="fa-solid fa-money-bill-wave" style="font-size:2.6rem;color:var(--primary)"></i><h5 style="margin-top:10px">Cash on Delivery</h5><p style="color:var(--muted)">Pay ${money(total)} in cash when your order arrives.</p></div>`,
+          );
+        }
+      }
+      function copyAddr() {
+        navigator.clipboard.writeText($("#usdtAddr").text());
+        toast("Wallet address copied", "success");
+      }
+      let QR_TIMER = null;
+      function generateQR() {
+        $("#qrcode").empty();
+        const total = cartTotals().total;
+        const data = `ECOSHOP|amount=${total.toFixed(2)}|ref=${uid("PAY")}|t=${Date.now()}`;
+        new QRCode(document.getElementById("qrcode"), {
+          text: data,
+          width: 200,
+          height: 200,
+          colorDark: "#14532D",
+        });
+        startTimer("#qrTimer", 120);
+      }
+      function startTimer(sel, seconds) {
+        if (QR_TIMER) clearInterval(QR_TIMER);
+        let s = seconds;
+        const el = $(sel);
+        el.removeClass("expired");
+        const tick = () => {
+          const m = Math.floor(s / 60),
+            ss = String(s % 60).padStart(2, "0");
+          el.text(`${String(m).padStart(2, "0")}:${ss}`);
+          if (s <= 0) {
+            clearInterval(QR_TIMER);
+            el.text("EXPIRED").addClass("expired");
+            toast("Payment QR expired. Regenerate to continue.", "warn");
+          }
+          s--;
+        };
+        tick();
+        QR_TIMER = setInterval(tick, 1000);
+      }
+      function simulatePaySuccess() {
+        if (QR_TIMER) clearInterval(QR_TIMER);
+        placeOrder(true);
+      }
+      function placeOrder(paid = false) {
+        if (!DB.cart.length) {
+          toast("Cart is empty", "error");
+          return;
+        }
+        const required = [
+          "co_name",
+          "co_phone",
+          "co_email",
+          "co_address",
+          "co_city",
+        ];
+        for (const id of required) {
+          if (
+            !$("#" + id)
+              .val()
+              .trim()
+          ) {
+            toast("Please complete shipping details", "error");
+            $("#" + id).focus();
+            return;
+          }
+        }
+        const t = cartTotals();
+        const order = {
+          id: uid("ECO"),
+          userId: DB.session?.id || "guest",
+          items: DB.cart.map((c) => ({ ...c })),
+          total: t.total,
+          subtotal: t.sub,
+          shipping: t.ship,
+          tax: t.tax,
+          discount: t.disc,
+          carrier: window.SHIP_METHOD.toUpperCase(),
+          payment: window.PAY_METHOD,
+          status: paid ? "preparing" : "confirmed",
+          createdAt: Date.now(),
+          shipping: {
+            name: $("#co_name").val(),
+            phone: $("#co_phone").val(),
+            email: $("#co_email").val(),
+            address: $("#co_address").val(),
+            city: $("#co_city").val(),
+            zip: $("#co_zip").val(),
+            note: $("#co_note").val(),
+          },
+        };
+        createItem("orders", order);
+        createItem("payments", {
+          id: uid("PAY"),
+          orderId: order.id,
+          method: window.PAY_METHOD,
+          amount: t.total,
+          status: paid ? "paid" : "pending",
+          createdAt: Date.now(),
+        });
+        DB.cart = [];
+        DB.promo = null;
+        saveDB();
+        renderCart();
+        $("#successOid").text(order.id);
+        openModal("successModal");
+      }
+
+      /* ---------------- TRACKING ---------------- */
+      function trackOrder() {
+        const oid = $("#trackInput").val().trim();
+        const order = getItem("orders", oid);
+        if (!order) {
+          $("#trackResult").html(
+            `<div style="text-align:center;padding:30px;color:var(--muted)"><i class="fa-solid fa-circle-question" style="font-size:2.5rem"></i><p>Order not found. Try <strong>ECO-1001</strong>.</p></div>`,
+          );
+          return;
+        }
+        const steps = [
+          "confirmed",
+          "preparing",
+          "shipping",
+          "delivering",
+          "delivered",
+        ];
+        const labels = {
+          confirmed: "Order Confirmed",
+          preparing: "Preparing",
+          shipping: "Shipped",
+          delivering: "Out for Delivery",
+          delivered: "Delivered",
+        };
+        const cur = steps.indexOf(order.status);
+        $("#trackResult").html(`
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+      <div><strong>${order.id}</strong> · <span class="tag">${order.status}</span></div>
+      <div style="color:var(--muted)">Carrier: <strong>${order.carrier}</strong> · ${money(order.total)}</div>
+    </div>
+    <div class="tl">${steps
+      .map(
+        (s, i) => `
+      <div class="tl-step ${i < cur ? "done" : ""} ${i === cur ? "current" : ""}">
+        <strong>${labels[s]}</strong>
+        <small>${i <= cur ? new Date(order.createdAt + i * 3600000).toLocaleString() : "Pending"}</small>
+      </div>`,
+      )
+      .join("")}
+    </div>
+    <div class="tracking-map">
+      <div class="tm-road"></div>
+      <div class="tm-from"><i class="fa-solid fa-warehouse"></i> Warehouse</div>
+      <div class="tm-to"><i class="fa-solid fa-house"></i> ${escapeHtml(order.shipping?.city || "You")}</div>
+      <div class="tm-truck"><i class="fa-solid fa-truck-fast"></i></div>
+    </div>
+  `);
+      }
+
+      /* ---------------- AUTH ---------------- */
+      let AUTH_MODE = "login";
+      function openAuth(mode = "login") {
+        AUTH_MODE = mode;
+        renderAuthForm();
+        openModal("authModal");
+      }
+      function renderAuthForm() {
+        if (AUTH_MODE === "login") {
+          $("#authFormWrap").html(`
+      <h3>Welcome back 👋</h3><p class="small-muted">Login to your EcoShop account.</p>
+      <div class="input-eco"><input id="li_user" placeholder=" "><label>Username or email</label></div>
+      <div class="input-eco"><input id="li_pass" type="password" placeholder=" "><label>Password</label><button class="toggle-pw" onclick="togglePw('li_pass',this)"><i class="fa-solid fa-eye"></i></button></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:6px 0 14px;font-size:.85rem">
+        <label><input type="checkbox" id="li_remember" checked> Remember me</label>
+        <a onclick="AUTH_MODE='forgot';renderAuthForm()" style="color:var(--primary);cursor:pointer;font-weight:700">Forgot password?</a>
+      </div>
+      <button class="btn-eco" style="width:100%;justify-content:center" onclick="doLogin()"><i class="fa-solid fa-arrow-right-to-bracket"></i> Login</button>
+      <p class="auth-switch">New here? <a onclick="AUTH_MODE='register';renderAuthForm()">Create an account</a></p>
+      <p style="text-align:center;color:var(--muted);font-size:.78rem;margin-top:10px">Demo: <strong>admin / admin123</strong></p>
+    `);
+        } else if (AUTH_MODE === "register") {
+          $("#authFormWrap").html(`
+      <h3>Create your account 🌱</h3><p class="small-muted">Join the eco-conscious community.</p>
+      <div class="input-eco"><input id="r_name" placeholder=" "><label>Full name</label></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="input-eco"><input id="r_user" placeholder=" "><label>Username</label></div>
+        <div class="input-eco"><input id="r_phone" placeholder=" "><label>Phone</label></div>
+      </div>
+      <div class="input-eco"><input id="r_email" placeholder=" "><label>Email</label></div>
+      <div class="input-eco"><input id="r_pass" type="password" placeholder=" " oninput="pwStrength(this.value)"><label>Password</label><button class="toggle-pw" onclick="togglePw('r_pass',this)"><i class="fa-solid fa-eye"></i></button>
+        <div class="pw-meter"><span id="pwMeter"></span></div>
+      </div>
+      <div class="input-eco"><input id="r_pass2" type="password" placeholder=" "><label>Confirm password</label></div>
+      <button class="btn-eco" style="width:100%;justify-content:center" onclick="doRegister()"><i class="fa-solid fa-user-plus"></i> Create account</button>
+      <p class="auth-switch">Already have an account? <a onclick="AUTH_MODE='login';renderAuthForm()">Login</a></p>
+    `);
+        } else if (AUTH_MODE === "forgot") {
+          const a = Math.floor(Math.random() * 9) + 1,
+            b = Math.floor(Math.random() * 9) + 1;
+          window.__captcha = a + b;
+          $("#authFormWrap").html(`
+      <h3>Forgot password</h3><p class="small-muted">We'll send an OTP to your email.</p>
+      <div class="input-eco"><input id="f_user" placeholder=" "><label>Username or email</label></div>
+      <div class="input-eco"><input id="f_cap" placeholder=" "><label>Captcha: ${a} + ${b} = ?</label></div>
+      <button class="btn-eco" style="width:100%;justify-content:center" onclick="sendOtp()"><i class="fa-solid fa-paper-plane"></i> Send OTP</button>
+      <p class="auth-switch"><a onclick="AUTH_MODE='login';renderAuthForm()">Back to login</a></p>
+    `);
+        } else if (AUTH_MODE === "otp") {
+          $("#authFormWrap").html(`
+      <h3>Enter OTP</h3><p class="small-muted">Code sent to your email. Valid for 2 minutes.</p>
+      <p style="background:var(--soft);padding:10px;border-radius:10px;text-align:center"><strong>Demo OTP:</strong> ${window.__otp}</p>
+      <div class="input-eco"><input id="o_code" placeholder=" " maxlength="6"><label>6-digit code</label></div>
+      <div style="text-align:center;margin:6px 0">Expires in <span id="otpTimer" style="font-weight:800;color:var(--primary)">02:00</span></div>
+      <div class="input-eco"><input id="o_newpass" type="password" placeholder=" "><label>New password</label></div>
+      <button class="btn-eco" style="width:100%;justify-content:center" onclick="verifyOtp()">Reset password</button>
+      <p class="auth-switch"><a id="resendOtp" onclick="resendOtp()" style="pointer-events:none;opacity:.5">Resend (<span id="resendT">30</span>s)</a></p>
+    `);
+          startOtpTimer();
+        }
+      }
+      function togglePw(id, btn) {
+        const i = $("#" + id);
+        const type = i.attr("type") === "password" ? "text" : "password";
+        i.attr("type", type);
+        $(btn).find("i").toggleClass("fa-eye fa-eye-slash");
+      }
+      function pwStrength(v) {
+        let s = 0;
+        if (v.length >= 8) s++;
+        if (/[A-Z]/.test(v)) s++;
+        if (/[0-9]/.test(v)) s++;
+        if (/[^A-Za-z0-9]/.test(v)) s++;
+        const colors = ["#dc2626", "#f59e0b", "#eab308", "#22c55e", "#16A34A"];
+        $("#pwMeter").css({ width: s * 25 + "%", background: colors[s] });
+      }
+      function doRegister() {
+        const name = $("#r_name").val().trim(),
+          user = $("#r_user").val().trim().toLowerCase(),
+          phone = $("#r_phone").val().trim(),
+          email = $("#r_email").val().trim().toLowerCase(),
+          pass = $("#r_pass").val(),
+          pass2 = $("#r_pass2").val();
+        if (!name || !user || !email || !pass) {
+          return toast("Please fill all required fields", "error");
+        }
+        if (!/^[\w._-]{3,20}$/.test(user))
+          return toast("Username 3-20 chars (letters, digits, . _ -)", "error");
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+          return toast("Invalid email", "error");
+        if (pass.length < 6)
+          return toast("Password too short (min 6)", "error");
+        if (pass !== pass2) return toast("Passwords do not match", "error");
+        if (DB.users.find((u) => u.username === user))
+          return toast("Username already taken", "error");
+        if (DB.users.find((u) => u.email === email))
+          return toast("Email already registered", "error");
+        const u = {
+          id: uid("U"),
+          fullName: name,
+          username: user,
+          email,
+          phone,
+          password: pass,
+          role: "customer",
+          createdAt: Date.now(),
+          avatar: name[0].toUpperCase(),
+          address: "",
+        };
+        createItem("users", u);
+        DB.session = u;
+        saveDB();
+        toast("Welcome to EcoShop! 🌱", "success");
+        closeModal("authModal");
+        updateUserUI();
+      }
+      function doLogin() {
+        const id = $("#li_user").val().trim().toLowerCase(),
+          pass = $("#li_pass").val();
+        const u = DB.users.find(
+          (u) => (u.username === id || u.email === id) && u.password === pass,
+        );
+        if (!u) {
+          toast("Invalid credentials", "error");
+          return;
+        }
+        DB.session = u;
+        saveDB();
+        updateUserUI();
+        toast(`Welcome back, ${u.fullName || u.username}`, "success");
+        closeModal("authModal");
+        if (u.role === "admin") setTimeout(() => navigateTo("admin"), 400);
+      }
+      function sendOtp() {
+        const id = $("#f_user").val().trim().toLowerCase();
+        const cap = parseInt($("#f_cap").val(), 10);
+        if (cap !== window.__captcha)
+          return toast("Captcha incorrect", "error");
+        const u = DB.users.find((u) => u.username === id || u.email === id);
+        if (!u) return toast("Account not found", "error");
+        window.__otp = String(Math.floor(100000 + Math.random() * 900000));
+        window.__otpUser = u.id;
+        window.__otpExpire = Date.now() + 120000;
+        // EmailJS optional (would require keys); we show OTP for demo
+        toast(`OTP sent (demo: ${window.__otp})`, "info", 5000);
+        AUTH_MODE = "otp";
+        renderAuthForm();
+      }
+      let OTP_TIMER;
+      function startOtpTimer() {
+        if (OTP_TIMER) clearInterval(OTP_TIMER);
+        let s = 120;
+        const tick = () => {
+          const m = Math.floor(s / 60),
+            ss = String(s % 60).padStart(2, "0");
+          $("#otpTimer").text(`${String(m).padStart(2, "0")}:${ss}`);
+          if (s <= 0) {
+            clearInterval(OTP_TIMER);
+            $("#otpTimer").text("EXPIRED").css("color", "#dc2626");
+          }
+          s--;
+        };
+        tick();
+        OTP_TIMER = setInterval(tick, 1000);
+        let r = 30;
+        const rt = setInterval(() => {
+          $("#resendT").text(r);
+          if (r <= 0) {
+            clearInterval(rt);
+            $("#resendOtp")
+              .css({ "pointer-events": "auto", opacity: 1 })
+              .text("Resend OTP");
+          }
+          r--;
+        }, 1000);
+      }
+      function resendOtp() {
+        window.__otp = String(Math.floor(100000 + Math.random() * 900000));
+        toast(`New OTP: ${window.__otp}`, "info", 5000);
+        renderAuthForm();
+      }
+      function verifyOtp() {
+        if (Date.now() > window.__otpExpire)
+          return toast("OTP expired", "error");
+        if ($("#o_code").val() !== window.__otp)
+          return toast("Wrong OTP", "error");
+        const np = $("#o_newpass").val();
+        if (np.length < 6) return toast("Password too short", "error");
+        updateItem("users", window.__otpUser, { password: np });
+        toast("Password reset successful", "success");
+        AUTH_MODE = "login";
+        renderAuthForm();
+      }
+      function logout() {
+        DB.session = null;
+        saveDB();
+        updateUserUI();
+        toast("Logged out", "info");
+        navigateTo("home");
+      }
+
+      function updateUserUI() {
+        if (DB.session) {
+          $("#userBtn").html('<i class="fa-solid fa-user-check"></i>');
+        } else {
+          $("#userBtn").html('<i class="fa-solid fa-user"></i>');
+        }
+      }
+
+      /* ---------------- PROFILE ---------------- */
+      const AVATAR_PRESETS = [
+        "🌱",
+        "🥑",
+        "🍎",
+        "🍇",
+        "🥦",
+        "🥕",
+        "🍋",
+        "🌿",
+        "🌻",
+        "🍃",
+        "🥬",
+        "🌾",
+        "🍅",
+        "🥥",
+        "🌶️",
+        "🥒",
+        "🌽",
+        "🍓",
+        "🫐",
+        "🍑",
+        "🥝",
+        "🍊",
+        "🥭",
+        "🍒",
+        "🌳",
+        "🍯",
+        "🦋",
+        "🐝",
+        "🌼",
+        "🐢",
+      ];
+      function renderProfile() {
+        if (!DB.session) {
+          openAuth("login");
+          navigateTo("home");
+          return;
+        }
+        const u = DB.session;
+        $("#profName").text(u.fullName || u.username);
+        $("#profEmail").text(u.email);
+        $("#profAvatar").html(
+          u.avatar && u.avatar.length <= 2
+            ? u.avatar
+            : (u.fullName || u.username)[0].toUpperCase(),
+        );
+        renderProfileTab("info");
+      }
+      function renderProfileTab(tab) {
+        const u = DB.session;
+        if (!u) return;
+        $("#profTabs li")
+          .removeClass("active")
+          .filter(`[data-ptab="${tab}"]`)
+          .addClass("active");
+        if (tab === "logout") {
+          logout();
+          return;
+        }
+        if (tab === "info") {
+          $("#profMain").html(`
+      <h4 style="font-weight:800">Profile information</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px">
+        <div class="input-eco"><input id="p_name" placeholder=" " value="${escapeHtml(u.fullName || "")}"><label>Full name</label></div>
+        <div class="input-eco"><input id="p_phone" placeholder=" " value="${escapeHtml(u.phone || "")}"><label>Phone</label></div>
+        <div class="input-eco" style="grid-column:1/-1"><input id="p_addr" placeholder=" " value="${escapeHtml(u.address || "")}"><label>Address</label></div>
+        <div class="input-eco"><input value="${escapeHtml(u.username)}" disabled placeholder=" "><label>Username</label></div>
+        <div class="input-eco"><input value="${escapeHtml(u.email)}" disabled placeholder=" "><label>Email</label></div>
+      </div>
+      <p style="color:var(--muted);font-size:.85rem">Member since ${new Date(u.createdAt).toLocaleDateString()}</p>
+      <button class="btn-eco" onclick="saveProfile()"><i class="fa-solid fa-save"></i> Save changes</button>
+    `);
+        } else if (tab === "orders") {
+          const list = DB.orders.filter((o) => o.userId === u.id);
+          $("#profMain").html(`
+      <h4 style="font-weight:800">My orders (${list.length})</h4>
+      ${
+        list.length
+          ? `<table class="table-eco" style="margin-top:14px"><thead><tr><th>Order</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th><th></th></tr></thead><tbody>
+        ${list.map((o) => `<tr><td><strong>${o.id}</strong></td><td>${new Date(o.createdAt).toLocaleDateString()}</td><td>${o.items.reduce((s, i) => s + i.qty, 0)}</td><td>${money(o.total)}</td><td><span class="tag">${o.status}</span></td><td><button class="btn-ghost" style="padding:6px 12px" onclick="navigateTo('tracking');$('#trackInput').val('${o.id}');trackOrder()">Track</button></td></tr>`).join("")}
+      </tbody></table>`
+          : '<p style="color:var(--muted);margin-top:14px">No orders yet.</p>'
+      }
+    `);
+        } else if (tab === "avatar") {
+          $("#profMain").html(`
+      <h4 style="font-weight:800">Choose your avatar</h4>
+      <p style="color:var(--muted)">Pick from 30 eco-themed avatars.</p>
+      <div class="avatar-picker">${AVATAR_PRESETS.map((a) => `<div class="ap ${u.avatar === a ? "sel" : ""}" onclick="pickAvatar('${a}')">${a}</div>`).join("")}</div>
+    `);
+        } else if (tab === "security") {
+          $("#profMain").html(`
+      <h4 style="font-weight:800">Change password</h4>
+      <div class="input-eco" style="margin-top:14px"><input id="s_old" type="password" placeholder=" "><label>Current password</label></div>
+      <div class="input-eco"><input id="s_new" type="password" placeholder=" "><label>New password</label></div>
+      <div class="input-eco"><input id="s_new2" type="password" placeholder=" "><label>Confirm new password</label></div>
+      <button class="btn-eco" onclick="changePassword()">Update password</button>
+    `);
+        }
+      }
+      function pickAvatar(a) {
+        updateItem("users", DB.session.id, { avatar: a });
+        DB.session.avatar = a;
+        renderProfile();
+        toast("Avatar updated", "success");
+      }
+      function saveProfile() {
+        const patch = {
+          fullName: $("#p_name").val(),
+          phone: $("#p_phone").val(),
+          address: $("#p_addr").val(),
+        };
+        updateItem("users", DB.session.id, patch);
+        Object.assign(DB.session, patch);
+        saveDB();
+        toast("Profile saved", "success");
+        renderProfile();
+      }
+      function changePassword() {
+        if ($("#s_old").val() !== DB.session.password)
+          return toast("Current password incorrect", "error");
+        if ($("#s_new").val().length < 6)
+          return toast("Password too short", "error");
+        if ($("#s_new").val() !== $("#s_new2").val())
+          return toast("Passwords do not match", "error");
+        updateItem("users", DB.session.id, { password: $("#s_new").val() });
+        DB.session.password = $("#s_new").val();
+        toast("Password updated", "success");
+      }
+
+      /* ---------------- ADMIN ---------------- */
+      let ADMIN_TAB = "dashboard",
+        ADMIN_PAGE = 1;
+      function renderAdmin() {
+        if (!DB.session || DB.session.role !== "admin") {
+          $("#adminMain").html(
+            '<div class="panel" style="text-align:center;padding:60px"><i class="fa-solid fa-lock" style="font-size:3rem;color:var(--muted)"></i><h3 style="margin-top:14px">Admin only</h3><p>Please login as admin (admin/admin123).</p><button class="btn-eco" onclick="openAuth(\'login\')">Login</button></div>',
+          );
+          return;
+        }
+        $(".admin-nav")
+          .removeClass("active")
+          .filter(`[data-atab="${ADMIN_TAB}"]`)
+          .addClass("active");
+        if (ADMIN_TAB === "dashboard") renderAdminDashboard();
+        if (ADMIN_TAB === "products") renderAdminProducts();
+        if (ADMIN_TAB === "orders") renderAdminOrders();
+        if (ADMIN_TAB === "users") renderAdminUsers();
+        if (ADMIN_TAB === "suppliers")
+          renderAdminCrud("suppliers", ["name", "country", "rating"]);
+        if (ADMIN_TAB === "certs")
+          renderAdminCrud("certifications", ["name", "color"]);
+        if (ADMIN_TAB === "analytics") renderAdminAnalytics();
+        if (ADMIN_TAB === "settings") renderAdminSettings();
+      }
+      function renderAdminDashboard() {
+        const rev = DB.orders.reduce((s, o) => s + o.total, 0);
+        const lowStock = DB.products.filter((p) => p.stock < 40).length;
+        $("#adminMain").html(`
+    <div class="admin-top"><h2>Dashboard</h2><div>${new Date().toLocaleDateString()}</div></div>
+    <div class="kpi-grid">
+      <div class="kpi"><small>Total revenue</small><strong>${money(rev)}</strong><span>+12% MoM</span></div>
+      <div class="kpi"><small>Orders</small><strong>${DB.orders.length}</strong><span>+5 today</span></div>
+      <div class="kpi"><small>Products</small><strong>${DB.products.length}</strong><span>${lowStock} low stock</span></div>
+      <div class="kpi"><small>Customers</small><strong>${DB.users.filter((u) => u.role !== "admin").length}</strong><span>+3 this week</span></div>
+    </div>
+    <div class="panel"><h5 style="font-weight:800">Revenue (last 7 days)</h5><canvas id="revChart" height="80"></canvas></div>
+    <div class="panel"><h5 style="font-weight:800">Recent orders</h5>
+      <table class="table-eco"><thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th></tr></thead>
+      <tbody>${DB.orders
+        .slice(-6)
+        .reverse()
+        .map(
+          (o) =>
+            `<tr><td>${o.id}</td><td>${escapeHtml(o.shipping?.name || "—")}</td><td>${money(o.total)}</td><td><span class="tag">${o.status}</span></td></tr>`,
+        )
+        .join("")}</tbody></table>
+    </div>
+  `);
+        const ctx = document.getElementById("revChart");
+        if (ctx) {
+          const labels = Array.from({ length: 7 }, (_, i) => {
+            const d = new Date();
+            d.setDate(d.getDate() - (6 - i));
+            return d.toLocaleDateString(undefined, { weekday: "short" });
+          });
+          new Chart(ctx, {
+            type: "line",
+            data: {
+              labels,
+              datasets: [
+                {
+                  label: "Revenue $",
+                  data: labels.map(() => Math.floor(200 + Math.random() * 900)),
+                  fill: true,
+                  borderColor: "#16A34A",
+                  backgroundColor: "rgba(34,197,94,.15)",
+                  tension: 0.4,
+                  pointBackgroundColor: "#16A34A",
+                },
+              ],
+            },
+            options: {
+              plugins: { legend: { display: false } },
+              scales: { y: { beginAtZero: true } },
+            },
+          });
+        }
+      }
+      function renderAdminProducts() {
+        const q = (window.adminSearch || "").toLowerCase();
+        const list = DB.products.filter(
+          (p) => !q || p.name.toLowerCase().includes(q),
+        );
+        const per = 8,
+          total = Math.ceil(list.length / per),
+          pg = Math.min(ADMIN_PAGE, total || 1);
+        const slice = list.slice((pg - 1) * per, pg * per);
+        $("#adminMain").html(`
+    <div class="admin-top"><h2>Products</h2>
+      <div style="display:flex;gap:8px"><input class="form-select-eco" placeholder="Search..." oninput="adminSearch=this.value;ADMIN_PAGE=1;renderAdmin()" value="${escapeHtml(window.adminSearch || "")}">
+      <button class="btn-eco" onclick="editProduct()"><i class="fa-solid fa-plus"></i> New product</button></div></div>
+    <div class="panel"><table class="table-eco"><thead><tr><th></th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Supplier</th><th></th></tr></thead>
+    <tbody>${slice
+      .map((p) => {
+        const c = getItem("categories", p.category),
+          s = getItem("suppliers", p.supplierId);
+        return `
+      <tr><td><img src="${p.image}" style="width:42px;height:42px;border-radius:8px;object-fit:cover" onerror="this.src='https://placehold.co/40/16A34A/fff'"></td>
+      <td><strong>${escapeHtml(p.name)}</strong></td><td>${c?.name || ""}</td><td>${money(p.price)}</td>
+      <td><span class="tag ${p.stock < 40 ? "warn" : ""}">${p.stock}</span></td><td>${s?.name || ""}</td>
+      <td class="row-actions"><button onclick="editProduct('${p.id}')"><i class="fa-solid fa-pen"></i></button><button onclick="confirmDelete('products','${p.id}')"><i class="fa-solid fa-trash"></i></button></td></tr>`;
+      })
+      .join("")}</tbody></table>
+      <div class="pagination-eco">${Array.from({ length: total || 1 }, (_, i) => `<button class="${pg === i + 1 ? "active" : ""}" onclick="ADMIN_PAGE=${i + 1};renderAdmin()">${i + 1}</button>`).join("")}</div>
+    </div>
+  `);
+      }
+      function editProduct(id) {
+        const p = id
+          ? getItem("products", id)
+          : {
+              name: "",
+              category: "c1",
+              price: 0,
+              stock: 0,
+              image: "",
+              certificationId: "cert1",
+              supplierId: "sup1",
+              origin: "",
+              rating: 5,
+              desc: "",
+              featured: false,
+            };
+        $("#genericBody").html(`
+    <h4 style="font-weight:800">${id ? "Edit" : "New"} product</h4>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px">
+      <div class="input-eco" style="grid-column:1/-1"><input id="ap_name" value="${escapeHtml(p.name)}" placeholder=" "><label>Product name</label></div>
+      <div class="input-eco" style="grid-column:1/-1"><input id="ap_image" value="${escapeHtml(p.image)}" placeholder=" "><label>Image URL</label></div>
+      <select class="form-select-eco" id="ap_cat">${DB.categories.map((c) => `<option value="${c.id}" ${c.id === p.category ? "selected" : ""}>${c.name}</option>`).join("")}</select>
+      <select class="form-select-eco" id="ap_sup">${DB.suppliers.map((s) => `<option value="${s.id}" ${s.id === p.supplierId ? "selected" : ""}>${s.name}</option>`).join("")}</select>
+      <select class="form-select-eco" id="ap_cert">${DB.certifications.map((c) => `<option value="${c.id}" ${c.id === p.certificationId ? "selected" : ""}>${c.name}</option>`).join("")}</select>
+      <div class="input-eco"><input id="ap_origin" value="${escapeHtml(p.origin || "")}" placeholder=" "><label>Origin</label></div>
+      <div class="input-eco"><input id="ap_price" type="number" step="0.01" value="${p.price}" placeholder=" "><label>Price</label></div>
+      <div class="input-eco"><input id="ap_stock" type="number" value="${p.stock}" placeholder=" "><label>Stock</label></div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px">
+      <button class="btn-ghost" onclick="closeModal('genericModal')">Cancel</button>
+      <button class="btn-eco" onclick="saveProduct('${id || ""}')">Save</button>
+    </div>
+  `);
+        openModal("genericModal");
+      }
+      function saveProduct(id) {
+        const data = {
+          name: $("#ap_name").val(),
+          image: $("#ap_image").val(),
+          category: $("#ap_cat").val(),
+          supplierId: $("#ap_sup").val(),
+          certificationId: $("#ap_cert").val(),
+          origin: $("#ap_origin").val(),
+          price: parseFloat($("#ap_price").val()) || 0,
+          stock: parseInt($("#ap_stock").val()) || 0,
+        };
+        if (!data.name || !data.image)
+          return toast("Name and image required", "error");
+        if (id) updateItem("products", id, data);
+        else {
+          data.rating = 5;
+          data.sold = 0;
+          data.featured = false;
+          data.desc = "";
+          createItem("products", data);
+        }
+        closeModal("genericModal");
+        toast("Product saved", "success");
+        renderAdmin();
+        renderFeatured();
+      }
+      function confirmDelete(coll, id) {
+        $("#genericBody").html(
+          `<h4 style="font-weight:800">Confirm delete</h4><p>This action cannot be undone.</p><div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px"><button class="btn-ghost" onclick="closeModal('genericModal')">Cancel</button><button class="btn-eco" style="background:#dc2626" onclick="deleteItem('${coll}','${id}');closeModal('genericModal');toast('Deleted','warn');renderAdmin()">Delete</button></div>`,
+        );
+        openModal("genericModal");
+      }
+      function renderAdminOrders() {
+        $("#adminMain").html(`<div class="admin-top"><h2>Orders</h2></div>
+    <div class="panel"><table class="table-eco"><thead><tr><th>ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Carrier</th><th>Status</th><th></th></tr></thead>
+    <tbody>${DB.orders
+      .slice()
+      .reverse()
+      .map(
+        (o) => `
+      <tr><td><strong>${o.id}</strong></td><td>${escapeHtml(o.shipping?.name || "—")}</td><td>${o.items.reduce((s, i) => s + i.qty, 0)}</td><td>${money(o.total)}</td><td>${o.carrier || "—"}</td>
+      <td><select class="form-select-eco" onchange="updateItem('orders','${o.id}',{status:this.value});toast('Order updated','success')">
+        ${["confirmed", "preparing", "shipping", "delivering", "delivered", "cancelled"].map((s) => `<option ${o.status === s ? "selected" : ""}>${s}</option>`).join("")}
+      </select></td>
+      <td class="row-actions"><button onclick="confirmDelete('orders','${o.id}')"><i class="fa-solid fa-trash"></i></button></td></tr>`,
+      )
+      .join("")}</tbody></table></div>`);
+      }
+      function renderAdminUsers() {
+        $("#adminMain").html(`<div class="admin-top"><h2>Users</h2></div>
+    <div class="panel"><table class="table-eco"><thead><tr><th>Username</th><th>Name</th><th>Email</th><th>Role</th><th>Joined</th><th></th></tr></thead>
+    <tbody>${DB.users
+      .map(
+        (u) => `
+      <tr><td><strong>${escapeHtml(u.username)}</strong></td><td>${escapeHtml(u.fullName || "—")}</td><td>${escapeHtml(u.email)}</td>
+      <td><span class="tag ${u.role === "admin" ? "info" : ""}">${u.role}</span></td><td>${new Date(u.createdAt).toLocaleDateString()}</td>
+      <td class="row-actions"><button onclick="confirmDelete('users','${u.id}')" ${u.role === "admin" ? "disabled style=opacity:.3" : ""}><i class="fa-solid fa-trash"></i></button></td></tr>`,
+      )
+      .join("")}</tbody></table></div>`);
+      }
+      function renderAdminCrud(coll, fields) {
+        $("#adminMain")
+          .html(`<div class="admin-top"><h2 style="text-transform:capitalize">${coll}</h2>
+    <button class="btn-eco" onclick="editCrud('${coll}','${fields.join(",")}','')"><i class="fa-solid fa-plus"></i> New</button></div>
+    <div class="panel"><table class="table-eco"><thead><tr>${fields.map((f) => `<th>${f}</th>`).join("")}<th></th></tr></thead>
+    <tbody>${DB[coll]
+      .map(
+        (
+          it,
+        ) => `<tr>${fields.map((f) => `<td>${escapeHtml(String(it[f] || ""))}</td>`).join("")}
+      <td class="row-actions"><button onclick="editCrud('${coll}','${fields.join(",")}','${it.id}')"><i class="fa-solid fa-pen"></i></button><button onclick="confirmDelete('${coll}','${it.id}')"><i class="fa-solid fa-trash"></i></button></td></tr>`,
+      )
+      .join("")}</tbody></table></div>`);
+      }
+      function editCrud(coll, fields, id) {
+        const list = fields.split(",");
+        const it = id ? getItem(coll, id) : {};
+        $("#genericBody")
+          .html(`<h4 style="font-weight:800">${id ? "Edit" : "New"} ${coll}</h4>
+    ${list.map((f) => `<div class="input-eco" style="margin-top:10px"><input id="cf_${f}" value="${escapeHtml(it[f] || "")}" placeholder=" "><label>${f}</label></div>`).join("")}
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px"><button class="btn-ghost" onclick="closeModal('genericModal')">Cancel</button><button class="btn-eco" onclick="saveCrud('${coll}','${fields}','${id || ""}')">Save</button></div>`);
+        openModal("genericModal");
+      }
+      function saveCrud(coll, fields, id) {
+        const data = {};
+        fields.split(",").forEach((f) => (data[f] = $("#cf_" + f).val()));
+        if (id) updateItem(coll, id, data);
+        else createItem(coll, data);
+        closeModal("genericModal");
+        toast("Saved", "success");
+        renderAdmin();
+      }
+      function renderAdminAnalytics() {
+        $("#adminMain").html(`<div class="admin-top"><h2>Analytics</h2></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px">
+    <div class="panel"><h5 style="font-weight:800">Sales by category</h5><canvas id="catChart" height="200"></canvas></div>
+    <div class="panel"><h5 style="font-weight:800">Top products</h5><canvas id="topChart" height="200"></canvas></div></div>`);
+        new Chart(document.getElementById("catChart"), {
+          type: "doughnut",
+          data: {
+            labels: DB.categories.map((c) => c.name),
+            datasets: [
+              {
+                data: DB.categories.map(
+                  (c) => DB.products.filter((p) => p.category === c.id).length,
+                ),
+                backgroundColor: [
+                  "#16A34A",
+                  "#22C55E",
+                  "#BBF7D0",
+                  "#15803D",
+                  "#84cc16",
+                  "#0ea5e9",
+                ],
+              },
+            ],
+          },
+        });
+        const top = DB.products
+          .slice()
+          .sort((a, b) => b.sold - a.sold)
+          .slice(0, 5);
+        new Chart(document.getElementById("topChart"), {
+          type: "bar",
+          data: {
+            labels: top.map((p) => p.name.slice(0, 12)),
+            datasets: [
+              {
+                label: "Sold",
+                data: top.map((p) => p.sold),
+                backgroundColor: "#16A34A",
+              },
+            ],
+          },
+          options: { plugins: { legend: { display: false } } },
+        });
+      }
+      function renderAdminSettings() {
+        $("#adminMain").html(`<div class="admin-top"><h2>Settings</h2></div>
+    <div class="panel"><h5 style="font-weight:800">Store settings</h5>
+      <div class="input-eco" style="margin-top:14px"><input id="set_tax" type="number" step="0.01" value="${DB.settings.taxRate}" placeholder=" "><label>Tax rate (0-1)</label></div>
+      <div class="input-eco"><input id="set_ship" type="number" value="${DB.settings.freeShippingOver}" placeholder=" "><label>Free shipping over ($)</label></div>
+      <button class="btn-eco" onclick="DB.settings.taxRate=parseFloat($('#set_tax').val());DB.settings.freeShippingOver=parseFloat($('#set_ship').val());saveDB();toast('Saved','success')">Save</button>
+    </div>
+    <div class="panel"><h5 style="font-weight:800">Danger zone</h5><button class="btn-ghost" style="border-color:#dc2626;color:#dc2626" onclick="if(confirm('Reset all data?')){localStorage.removeItem(DB_KEY);location.reload()}">Reset database</button></div>`);
+      }
+
+      /* ---------------- POLICIES ---------------- */
+      function openPolicy(type) {
+        const policies = {
+          legal:
+            "Legal Policy: EcoShop complies with consumer protection laws and ethical sourcing standards in all operating regions.",
+          terms:
+            "Terms of Use: By using this site you agree to lawful use, accurate account information, and our purchasing terms.",
+          privacy:
+            "Privacy Policy: We collect minimal data needed to process orders. We never sell your data.",
+          shipping:
+            "Shipping Policy: Free shipping over $50. Carriers: GHN, GHTK, Viettel Post, J&T. Delivery 1-3 business days.",
+          refund:
+            "Refund Policy: 30-day returns on unopened items. Refunds processed within 5 business days.",
+        };
+        $("#genericBody").html(
+          `<h4 style="font-weight:800;text-transform:capitalize">${type} policy</h4><p style="color:var(--muted);line-height:1.8">${policies[type]}</p>`,
+        );
+        openModal("genericModal");
+      }
+      function subscribeNews() {
+        const e = $("#newsEmail").val().trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e))
+          return toast("Please enter a valid email", "error");
+        toast("Subscribed! 🌱 Welcome to the EcoShop family.", "success");
+        $("#newsEmail").val("");
+      }
+
+      /* ---------------- THEME ---------------- */
+      function toggleTheme() {
+        const cur = document.documentElement.dataset.theme || "light";
+        const next = cur === "light" ? "dark" : "light";
+        document.documentElement.dataset.theme = next;
+        localStorage.setItem("eco_theme", next);
+        $("#themeBtn i").attr(
+          "class",
+          next === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon",
+        );
+      }
+
+      /* ---------------- PARTICLES + MAGNETIC ---------------- */
+      function spawnParticles() {
+        const w = $("#particles");
+        for (let i = 0; i < 14; i++) {
+          const s = 40 + Math.random() * 100;
+          $(`<div class="particle"></div>`)
+            .css({
+              width: s,
+              height: s,
+              top: Math.random() * 100 + "%",
+              left: Math.random() * 100 + "%",
+              animationDuration: 8 + Math.random() * 10 + "s",
+              animationDelay: -Math.random() * 10 + "s",
+            })
+            .appendTo(w);
+        }
+      }
+      function bindMagnetic() {
+        $(document)
+          .on("mousemove", ".magnetic", function (e) {
+            const r = this.getBoundingClientRect();
+            const x = e.clientX - r.left - r.width / 2;
+            const y = e.clientY - r.top - r.height / 2;
+            $(this).css("transform", `translate(${x * 0.2}px,${y * 0.2}px)`);
+          })
+          .on("mouseleave", ".magnetic", function () {
+            $(this).css("transform", "translate(0,0)");
+          });
+      }
+
+      /* ---------------- INIT ---------------- */
+      $(function () {
+        loadDB();
+        applyI18n();
+        // theme
+        const savedTheme = localStorage.getItem("eco_theme") || "light";
+        document.documentElement.dataset.theme = savedTheme;
+        $("#themeBtn i").attr(
+          "class",
+          savedTheme === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon",
+        );
+        $("#yr").text(new Date().getFullYear());
+
+        renderHomeCategories();
+        renderFeatured();
+        renderCart();
+        updateUserUI();
+        spawnParticles();
+        bindMagnetic();
+
+        // hide loader
+        setTimeout(() => $("#loader").addClass("hide"), 700);
+
+        // nav links
+        $(".nav-links a").on("click", function (e) {
+          e.preventDefault();
+          navigateTo($(this).data("view"));
+        });
+        $(".brand").on("click", function (e) {
+          e.preventDefault();
+          navigateTo("home");
+        });
+        $("#navToggle").on("click", () => $("#navLinks").toggleClass("show"));
+        $(window).on("scroll", () =>
+          $("#navbar").toggleClass("scrolled", window.scrollY > 30),
+        );
+
+        $("#cartBtn").on("click", () => {
+          renderCart();
+          openDrawer("cartDrawer");
+        });
+        $("#overlay").on("click", closeDrawers);
+        $("#themeBtn").on("click", toggleTheme);
+        $("#userBtn").on("click", () => {
+          if (DB.session) navigateTo("profile");
+          else openAuth("login");
+        });
+        $("#langSelect").on("change", function () {
+          LANG = $(this).val();
+          localStorage.setItem("eco_lang", LANG);
+          applyI18n();
+        });
+
+        // search
+        $("#searchBtn").on("click", () => {
+          openModal("searchModal");
+          setTimeout(() => $("#qSearch").focus(), 200);
+        });
+        $("#qSearch").on("input", function () {
+          const q = $(this).val().toLowerCase();
+          const list = DB.products
+            .filter((p) => p.name.toLowerCase().includes(q))
+            .slice(0, 6);
+          $("#qSearchResults").html(
+            list
+              .map(
+                (
+                  p,
+                ) => `<div onclick="closeModal('searchModal');openProduct('${p.id}')" style="display:flex;gap:10px;padding:10px;border-radius:10px;cursor:pointer;align-items:center" onmouseover="this.style.background='var(--soft)'" onmouseout="this.style.background=''">
+      <img src="${p.image}" style="width:46px;height:46px;border-radius:10px;object-fit:cover"><div><strong style="font-size:.9rem">${escapeHtml(p.name)}</strong><br><small style="color:var(--muted)">${money(p.price)}</small></div></div>`,
+              )
+              .join("") ||
+              '<p style="color:var(--muted);text-align:center;padding:20px">No results.</p>',
+          );
+        });
+
+        // shop filters
+        $("#searchInput").on("input", function () {
+          SHOP_STATE.search = $(this).val();
+          renderShop();
+        });
+        $("#filterCert").on("change", function () {
+          SHOP_STATE.cert = $(this).val();
+          renderShop();
+        });
+        $("#filterSupplier").on("change", function () {
+          SHOP_STATE.supplier = $(this).val();
+          renderShop();
+        });
+        $("#sortBy").on("change", function () {
+          SHOP_STATE.sort = $(this).val();
+          renderShop();
+        });
+        $(document).on("click", ".chip[data-cat]", function () {
+          SHOP_STATE.cat = $(this).data("cat");
+          renderShop();
+        });
+
+        // checkout tabs
+        $(document).on("click", "#shipTabs .pay-tab", function () {
+          $("#shipTabs .pay-tab").removeClass("active");
+          $(this).addClass("active");
+          window.SHIP_METHOD = $(this).data("ship");
+          renderCheckout();
+        });
+        $(document).on("click", "#payTabs .pay-tab", function () {
+          $("#payTabs .pay-tab").removeClass("active");
+          $(this).addClass("active");
+          window.PAY_METHOD = $(this).data("pay");
+          renderPayArea();
+        });
+
+        // profile tabs
+        $(document).on("click", "#profTabs li", function () {
+          renderProfileTab($(this).data("ptab"));
+        });
+
+        // admin
+        $(document).on("click", ".admin-nav[data-atab]", function () {
+          ADMIN_TAB = $(this).data("atab");
+          ADMIN_PAGE = 1;
+          renderAdmin();
+        });
+
+        // ESC closes
+        $(document).on("keydown", (e) => {
+          if (e.key === "Escape") {
+            $(".eco-modal").removeClass("show");
+            closeDrawers();
+            $("body").css("overflow", "");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
